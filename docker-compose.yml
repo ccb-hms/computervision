@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  app:
+    image: dentexmodel:01
+    container_name: dentexmodel
+    build: 
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        - CI_USER_TOKEN=${CI_USER_TOKEN}
+        - DEV_dentexmodel=1
+    environment:
+    - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+    - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/app
+      - ./data:/app/data
+    # network_mode: "host"

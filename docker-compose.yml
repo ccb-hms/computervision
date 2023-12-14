@@ -5,16 +5,16 @@ services:
     container_name: dentexmodel
     build: 
       context: .
+      network: host
       dockerfile: ./Dockerfile
       args:
-        - CI_USER_TOKEN=${CI_USER_TOKEN}
         - DEV_dentexmodel=1
     environment:
     - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
     - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    - HOME=/app
     ports:
       - "8888:8888"
     volumes:
       - .:/app
       - ./data:/app/data
-    # network_mode: "host"

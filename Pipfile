@@ -12,6 +12,8 @@ fastparquet = "*"
 scikit-learn = "*"
 scikit-image = "*"
 opencv-python = "*"
+lightning = "*"
+albumentations = "*"
 
 [dev-packages]
 jupyterlab = "*"

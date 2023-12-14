@@ -12,11 +12,14 @@ fastparquet = "*"
 scikit-learn = "*"
 scikit-image = "*"
 opencv-python = "*"
+tqdm = "*"
+albumentations = "*"
+lightning = "*"
 
 [dev-packages]
+matplotlib = "*"
 jupyterlab = "*"
 ipywidgets = "*"
-matplotlib = "*"
 seaborn = "*"
 
 [requires]

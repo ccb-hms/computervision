@@ -1,0 +1,13 @@
+{
+  "shell_port": 45259,
+  "iopub_port": 46689,
+  "stdin_port": 38435,
+  "control_port": 39877,
+  "hb_port": 52437,
+  "ip": "127.0.0.1",
+  "key": "afff657d-38732f4f34772e59a384f963",
+  "transport": "tcp",
+  "signature_scheme": "hmac-sha256",
+  "kernel_name": "python3",
+  "jupyter_session": "/app/notebooks/1_Dentex_Download.ipynb"
+}

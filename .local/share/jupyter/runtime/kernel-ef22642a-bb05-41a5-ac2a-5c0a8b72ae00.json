@@ -1,0 +1,13 @@
+{
+  "shell_port": 47787,
+  "iopub_port": 34019,
+  "stdin_port": 52499,
+  "control_port": 58417,
+  "hb_port": 50539,
+  "ip": "127.0.0.1",
+  "key": "2c628f26-818e8708db3299decd6c0cf2",
+  "transport": "tcp",
+  "signature_scheme": "hmac-sha256",
+  "kernel_name": "python3",
+  "jupyter_session": "/app/notebooks/2_Dentex_Create_Dataset.ipynb"
+}

@@ -1,0 +1,13 @@
+{
+  "shell_port": 60111,
+  "iopub_port": 51367,
+  "stdin_port": 58529,
+  "control_port": 37641,
+  "hb_port": 57569,
+  "ip": "127.0.0.1",
+  "key": "de3d76b4-3e6c9a8a6af87fa3830547f7",
+  "transport": "tcp",
+  "signature_scheme": "hmac-sha256",
+  "kernel_name": "python3",
+  "jupyter_session": "/app/notebooks/3_Split_Train_Val_Test.ipynb"
+}

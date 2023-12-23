@@ -7,3 +7,6 @@ ls
 pip list
 pip freeze > requirements.txt
 exit
+ld
+python
+exit

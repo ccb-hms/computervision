@@ -43,7 +43,7 @@ def create_image_data(dataset_url=url):
 
     # Annotation file
     annotation_file = glob.glob(os.path.join(data_dir, 'quadrant-enumeration-disease', '*.json'))
-    if len(annotation_file)>0:
+    if len(annotation_file) > 0:
         annotation_file = annotation_file[0]
         print(f'Annotation data file: {annotation_file}')
         with open(annotation_file, 'r') as file:
@@ -124,13 +124,14 @@ def create_image_data(dataset_url=url):
             if not os.path.exists(box_file):
                 im = ImageData().load_image(file)
                 im_crop = crop_image(im, bbox)
-                # We should save the height and width of the cropped images
-                box_df = box_df.assign(cropped_width=im_crop.shape[1],
-                                       cropped_height=im_crop.shape[0])
                 # Some contrast enhancement
                 im_crop_enhanced = ImageData().hist_eq(im_crop)
                 # Save the image
                 cv2.imwrite(box_file, cv2.cvtColor(im_crop_enhanced, cv2.COLOR_RGB2BGR))
+            # Add the image size to the data frame
+            box_file_size = ImageData().image_size(box_file)
+            box_df = box_df.assign(im_width=box_file_size[1],
+                                   im_height=box_file_size[0])
             # Add the data frame for this image to the list
             data_df_list.append(box_df)
     # Concatenate the data frames

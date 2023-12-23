@@ -114,6 +114,15 @@ class ImageData:
             logger.error(error_msg)
         return output_array
 
+    def image_size(self, image_path):
+        """ Load image and return size in pixels (height, width) """
+        output = None
+        if is_image(image_path):
+            output_array = self.load_image(image_path)
+            if output_array is not None:
+                output = tuple(output_array.shape)
+        return output
+
     def np_square_pad(self, im_array, pad_pixels, pad_number=0):
         """ Pad 2D image
         Parameters:

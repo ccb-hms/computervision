@@ -23,14 +23,15 @@ def load_and_process_image(image_file_path, max_image_size=550):
     """
     Image preprocessing
     """
+    # For the albumentations transformation, max_image_size needs to be of type 'int'
+    if not isinstance(max_image_size, int):
+        max_image_size = int(max_image_size)
     transform = alb.Compose([LongestMaxSize(max_size=max_image_size),
                              PadIfNeeded(min_height=max_image_size,
                                          min_width=max_image_size,
                                          border_mode=cv2.BORDER_CONSTANT,
                                          value=0)])
     im_raw = ImageData().load_image(image_file_path)
-    #im_enh = ImageData().hist_eq(im_raw)
-    #im_gray = ImageData().np2color(im_enh, color_scheme='GRAY')
     im_output = transform(image=im_raw)['image']
     return im_output
 
@@ -65,7 +66,6 @@ class DatasetFromDF(Dataset):
         if self.validate:
             validate_image_data(data_df=self.df, file_path_col=self.file_col)
 
-
     def __len__(self):
         return self.df.shape[0]
 
@@ -80,7 +80,7 @@ class DatasetFromDF(Dataset):
             img = self.transform(image=img)['image']
         img_tensor = torch.from_numpy(img)
         img_tensor = torch.unsqueeze(img_tensor, dim=0)
-        #img_tensor = torch.from_numpy(img).permute(2, 0, 1)
+        # img_tensor = torch.from_numpy(img).permute(2, 0, 1)
         label_tensor = torch.from_numpy(np.array(label))
         output = tuple([img_tensor, label_tensor])
         return output

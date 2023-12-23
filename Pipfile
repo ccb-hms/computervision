@@ -21,6 +21,7 @@ matplotlib = "*"
 jupyterlab = "*"
 ipywidgets = "*"
 seaborn = "*"
+dentexmodel = {file = ".", editable = true}
 
 [requires]
 python_version = "3.10"

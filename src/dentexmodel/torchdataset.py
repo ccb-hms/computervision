@@ -78,9 +78,10 @@ class DatasetFromDF(Dataset):
         img = load_and_process_image(image_file_path=file, max_image_size=self.max_image_size)
         if self.transform:
             img = self.transform(image=img)['image']
-        img_tensor = torch.from_numpy(img)
-        img_tensor = torch.unsqueeze(img_tensor, dim=0)
-        # img_tensor = torch.from_numpy(img).permute(2, 0, 1)
+        img_tensor = torch.from_numpy(img).permute(2, 0, 1)
+        # For grayscale images, we need to add a color dimension.
+        # img_tensor = torch.unsqueeze(img_tensor, dim=0)
+        # img_tensor = img_tensor.permute(2, 0, 1)
         label_tensor = torch.from_numpy(np.array(label))
         output = tuple([img_tensor, label_tensor])
         return output

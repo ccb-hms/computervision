@@ -15,6 +15,7 @@ opencv-python = "*"
 tqdm = "*"
 albumentations = "*"
 lightning = "*"
+torchxrayvision = "*"
 
 [dev-packages]
 matplotlib = "*"

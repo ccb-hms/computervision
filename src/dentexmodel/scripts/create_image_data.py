@@ -80,7 +80,7 @@ def create_image_data(dataset_url=url):
                              area=[an_dict.get('area')],
                              bbox=[an_dict.get('bbox')],
                              box_name=(f'{os.path.splitext(id_df["file_name"].values[0])[0]}_'
-                                       f'{quadrant}_{position}'))
+                                       f'{idx}_{quadrant}_{position}'))
         an_df_list.append(id_df)
     an_df = pd.concat(an_df_list, axis=0, ignore_index=True)
 

@@ -11,26 +11,25 @@ from typing import Any
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
+from torchvision.models import resnet50, ResNet50_Weights
 
 # Lightning module
 from lightning.pytorch import LightningModule
-
-# TorchXRayVision module
-import torchxrayvision as xrv
 from lightning.pytorch.utilities.types import TRAIN_DATALOADERS, EVAL_DATALOADERS, OptimizerLRScheduler, STEP_OUTPUT
 
 logger = logging.getLogger(name=__name__)
 
 
-class ResNetModel:
-    """ This is the ResNet50 model from torchxrayvision """
+class ResNet50Model:
+    """ This is the ResNet50 model from torchvision.models
+    We use this model with nn.CrossEntropyLoss() which does NOT require a softmax at the output
+    """
 
     def __init__(self, n_outputs=4):
         self.n_outputs = n_outputs
 
     def create_model(self):
-        model = xrv.models.ResNet(weights='resnet50-res512-all')
-        model = model.model
+        model = resnet50(weights=ResNet50_Weights.DEFAULT)
         model.fc = nn.Sequential(
             nn.Linear(in_features=model.fc.in_features, out_features=512),
             nn.ReLU(),
@@ -46,10 +45,9 @@ class ToothModel(LightningModule):
                  test_dataset,
                  batch_size,
                  num_workers=1,
-                 lr=1.0e-3):
+                 lr=1.0e-3,
+                 model=None):
         super().__init__()
-        # Define your model architecture here
-        self.model = ResNetModel().create_model()
         self.save_hyperparameters()
         self.train_dataset = train_dataset
         self.val_dataset = val_dataset
@@ -58,6 +56,11 @@ class ToothModel(LightningModule):
         self.num_workers = num_workers
         self.lr = lr
         self.decimals = 5
+        # Model architecture
+        if model is None:
+            self.model = ResNet50Model().create_model()
+        else:
+            self.model = model
         # Lists to store metrics
         self.training_step_output_list = []
         self.validation_step_output_list = []
@@ -108,7 +111,6 @@ class ToothModel(LightningModule):
     def test_step(self, batch, batch_idx, *args: Any, **kwargs: Any) -> STEP_OUTPUT:
         image, label = batch
         pred = self.forward(image)
-        loss = self.criterion(pred, label)
         test_step_prediction = {'pred': pred, 'label': label}
         return test_step_prediction
 

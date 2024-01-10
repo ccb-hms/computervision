@@ -16,6 +16,7 @@ tqdm = "*"
 albumentations = "*"
 lightning = "*"
 torchxrayvision = "*"
+tensorflow = "*"
 
 [dev-packages]
 matplotlib = "*"

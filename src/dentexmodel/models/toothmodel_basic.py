@@ -1,4 +1,6 @@
-""" dentexmodel.models
+"""
+toothmodel1.py
+Minimal model code for training and inference
 Andreas Werdich
 Center for Computational Biomedicine
 Harvard Medical School
@@ -15,7 +17,7 @@ from torchvision.models import resnet50, ResNet50_Weights
 
 # Lightning module
 from lightning.pytorch import LightningModule
-from lightning.pytorch.utilities.types import TRAIN_DATALOADERS, EVAL_DATALOADERS, OptimizerLRScheduler, STEP_OUTPUT
+from lightning.pytorch.utilities.types import TRAIN_DATALOADERS, OptimizerLRScheduler, STEP_OUTPUT
 
 logger = logging.getLogger(name=__name__)
 
@@ -41,17 +43,13 @@ class ResNet50Model:
 class ToothModel(LightningModule):
     def __init__(self,
                  train_dataset,
-                 val_dataset,
-                 test_dataset,
                  batch_size,
                  num_workers=1,
                  lr=1.0e-3,
                  model=None):
         super().__init__()
-        self.save_hyperparameters()
+        self.save_hyperparameters(ignore=['model'])
         self.train_dataset = train_dataset
-        self.val_dataset = val_dataset
-        self.test_dataset = test_dataset
         self.batch_size = batch_size
         self.num_workers = num_workers
         self.lr = lr
@@ -61,10 +59,6 @@ class ToothModel(LightningModule):
             self.model = ResNet50Model().create_model()
         else:
             self.model = model
-        # Lists to store metrics
-        self.training_step_output_list = []
-        self.validation_step_output_list = []
-        self.test_step_output_list = []
         # Loss function
         self.criterion = nn.CrossEntropyLoss()
 
@@ -73,22 +67,6 @@ class ToothModel(LightningModule):
                         batch_size=self.batch_size,
                         num_workers=self.num_workers,
                         shuffle=True,
-                        pin_memory=True)
-        return dl
-
-    def val_dataloader(self) -> EVAL_DATALOADERS:
-        dl = DataLoader(self.val_dataset,
-                        batch_size=self.batch_size,
-                        num_workers=self.num_workers,
-                        shuffle=False,
-                        pin_memory=True)
-        return dl
-
-    def test_dataloader(self) -> EVAL_DATALOADERS:
-        dl = DataLoader(self.test_dataset,
-                        batch_size=self.batch_size,
-                        num_workers=self.num_workers,
-                        shuffle=False,
                         pin_memory=True)
         return dl
 
@@ -101,18 +79,6 @@ class ToothModel(LightningModule):
         pred = self.forward(image)
         loss = self.criterion(pred, label)
         return loss
-
-    def validation_step(self, batch, batch_idx, *args: Any, **kwargs: Any) -> STEP_OUTPUT:
-        image, label = batch
-        pred = self.forward(image)
-        loss = self.criterion(pred, label)
-        return loss
-
-    def test_step(self, batch, batch_idx, *args: Any, **kwargs: Any) -> STEP_OUTPUT:
-        image, label = batch
-        pred = self.forward(image)
-        test_step_prediction = {'pred': pred, 'label': label}
-        return test_step_prediction
 
     def predict_step(self, batch, batch_idx, *args: Any, **kwargs: Any) -> Any:
         image, label = batch

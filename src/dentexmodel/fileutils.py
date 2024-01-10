@@ -104,7 +104,7 @@ class FileOP:
             else:
                 logger.info(f'File exists: {output_file}')
             # Unpacking
-            output_file_path = None
+            output_file_path = output_file
             if os.path.exists(output_file) and extract:
                 file_parts = os.path.splitext(output_file)
                 xt = file_parts[-1]
@@ -119,9 +119,8 @@ class FileOP:
                             logger.info(f'Deleted compressed file {output_file}')
                 elif xt in ['.json', '.csv', '.pickle', '.parquet']:
                     print(f'Created {xt} file.')
-                    output_file_path = output_file
                 else:
-                    print(f'Unexpected extension {xt}')
+                    print(f'File: {xt} loaded.')
                     logger.warning(f'File extension is unexpected {xt}.')
             elif os.path.exists(output_file) and not extract:
                 output_file_path = output_file

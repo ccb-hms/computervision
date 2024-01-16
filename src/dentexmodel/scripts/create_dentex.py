@@ -1,5 +1,5 @@
 """
-Create Dentex data set for baseline performance testing
+Script to download and create the dentex disease data set
 Andreas Werdich
 Center for Computational Biomedicine
 """
@@ -21,12 +21,12 @@ data_dir = os.path.join(dentex_dir, 'dentex_disease')
 Path(data_dir).mkdir(parents=True, exist_ok=True)
 url = 'https://dsets.s3.amazonaws.com/dentex/dentex-quadrant-enumeration-disease.tar.gz'
 
-def create_image_data(dataset_url=url):
 
+def main():
     """ Download and create the dentex annotated data set """
 
     # Download data
-    data_tar_file = FileOP().download_from_url(dataset_url, download_dir=data_dir)
+    data_tar_file = FileOP().download_from_url(url, download_dir=data_dir)
     if data_tar_file is not None and os.path.exists(data_tar_file):
         with tarfile.open(data_tar_file, 'r') as tar:
             tar.extractall(data_dir)
@@ -38,8 +38,8 @@ def create_image_data(dataset_url=url):
     im_number_list = [int(os.path.splitext(file)[0].rsplit('_', maxsplit=1)[-1]) for file in file_name_list]
     files = pd.DataFrame({'image_number': im_number_list,
                           'file_name': file_name_list,
-                          'file_path': file_list}).\
-                    sort_values(by='image_number', ascending=True).reset_index(drop=True)
+                          'file_path': file_list}). \
+        sort_values(by='image_number', ascending=True).reset_index(drop=True)
 
     # Annotation file
     annotation_file = glob.glob(os.path.join(data_dir, 'quadrant-enumeration-disease', '*.json'))
@@ -54,10 +54,10 @@ def create_image_data(dataset_url=url):
     else:
         annotation_file = None
     # Add image ids to the files data frame
-    js_im_df = pd.DataFrame(js_im).\
-                    merge(files, on='file_name', how='inner').\
-                    sort_values(by='id', ascending=True).\
-                    reset_index(drop=True)
+    js_im_df = pd.DataFrame(js_im). \
+        merge(files, on='file_name', how='inner'). \
+        sort_values(by='id', ascending=True). \
+        reset_index(drop=True)
 
     # Tooth locations and disease classifications
     quadrant_df = pd.DataFrame(js.get('categories_1'))
@@ -85,13 +85,13 @@ def create_image_data(dataset_url=url):
     an_df = pd.concat(an_df_list, axis=0, ignore_index=True)
 
     # Add the number of annotations to each image
-    n_annotations = an_df[['file_name', 'label']].\
-                    groupby('file_name').count().\
-                    reset_index(drop=False).\
-                    rename(columns={'label': 'annotations'})
-    an_df = an_df.merge(n_annotations, on='file_name', how='inner').\
-                    sort_values(by='id', ascending=True).\
-                    reset_index(drop=True)
+    n_annotations = an_df[['file_name', 'label']]. \
+        groupby('file_name').count(). \
+        reset_index(drop=False). \
+        rename(columns={'label': 'annotations'})
+    an_df = an_df.merge(n_annotations, on='file_name', how='inner'). \
+        sort_values(by='id', ascending=True). \
+        reset_index(drop=True)
 
     # Save the data frame with the file paths and annotations
     df_file_name = 'dentex_disease_dataset.parquet'
@@ -144,4 +144,5 @@ def create_image_data(dataset_url=url):
     return data_df
 
 
-
+if __name__ == "__main__":
+    data_df = main()

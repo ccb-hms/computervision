@@ -4,7 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-dentexmodel = {file = ".", editable = true}
 cython = "*"
 pandas = "*"
 pyarrow = "*"
@@ -17,6 +16,7 @@ albumentations = "*"
 lightning = "*"
 torchxrayvision = "*"
 tensorflow = "*"
+dentexmodel = {file = ".", editable = true}
 
 [dev-packages]
 matplotlib = "*"

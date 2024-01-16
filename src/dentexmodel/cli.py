@@ -15,15 +15,16 @@ Why does this file exist, and why not put this in __main__?
   Also see (1) from http://click.pocoo.org/5/setuptools/#setuptools-integration
 """
 import argparse
-from dentexmodel.scripts.create_image_data import create_image_data
+from dentexmodel.scripts.create_dentex import main as create_dentex
 
 parser = argparse.ArgumentParser(description='PyTorch Workflow')
-#parser.add_argument('names', metavar='NAME', nargs=argparse.ZERO_OR_MORE,
-#                    help="Model to be used.")
-#parser.add_argument('-m', '--model', default = 'CNN_small', help = 'Model.')
+
+
+# parser.add_argument('names', metavar='NAME', nargs=argparse.ZERO_OR_MORE, help="Model to be used.")
+# parser.add_argument('-m', '--model', default = 'CNN_small', help = 'Model.')
 
 def main(args=None):
     # We will add command line argument later.
     args = parser.parse_args(args=args)
-    dataset = create_image_data()
+    dataset = create_dentex()
     print(f'Created image dataset with {len(dataset)} images in /data directory.')

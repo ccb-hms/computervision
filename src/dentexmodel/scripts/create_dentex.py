@@ -160,7 +160,7 @@ def main():
     data_df = pd.concat(data_df_list, axis=0, ignore_index=True)
 
     # Train val test split
-    split_df = val_test_split(df=data_df, label_col='label', n_test_per_class=30, n_val_per_class=15)
+    split_df = val_test_split(df=data_df, label_col='label', n_test_per_class=30, n_val_per_class=30)
 
     # Save the data frames
     df_box_file = df_file.replace('dataset', 'cropped_dataset')

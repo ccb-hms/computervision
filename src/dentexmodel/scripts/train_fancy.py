@@ -24,7 +24,8 @@ from dentexmodel.imageproc import ImageData
 from dentexmodel.torchdataset import DatasetFromDF
 
 # %% Directories and files
-dentex_dir = os.path.join(os.environ['HOME'], 'data', 'dentex')
+# dentex_dir = os.path.join(os.environ['HOME'], 'data', 'dentex')
+dentex_dir = os.path.join(os.environ['data_dir'], 'dentex')
 data_dir = os.path.join(dentex_dir, 'dentex_disease')
 image_dir = os.path.join(data_dir, 'quadrant-enumeration-disease', 'xrays', 'crop')
 data_file_name = 'dentex_disease_datasplit.parquet'
@@ -33,12 +34,12 @@ data_file = os.path.join(dentex_dir, data_file_name)
 # Model parameters and name
 max_im_size = 550
 im_size = 224
-model_name = 'fancy240115'
+model_name = 'fancy240119'
 model_version = 1
-max_epochs = 6
+max_epochs = 300
 num_classes = 4
-num_workers = 4
-batch_size = 16
+num_workers = 8
+batch_size = 64
 check_val_every_n_epoch = 1
 checkpoint_every_n_epoch = 2
 

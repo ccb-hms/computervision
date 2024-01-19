@@ -17,7 +17,8 @@ from dentexmodel.fileutils import FileOP
 from dentexmodel.imageproc import ImageData, crop_image
 
 # Directories and settings
-dentex_dir = os.path.join(os.environ['HOME'], 'data', 'dentex')
+# dentex_dir = os.path.join(os.environ['HOME'], 'data', 'dentex')
+dentex_dir = os.path.join(os.environ['data_dir'], 'dentex')
 data_dir = os.path.join(dentex_dir, 'dentex_disease')
 Path(data_dir).mkdir(parents=True, exist_ok=True)
 url = 'https://dsets.s3.amazonaws.com/dentex/dentex-quadrant-enumeration-disease.tar.gz'

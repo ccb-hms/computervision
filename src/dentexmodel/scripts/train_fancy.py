@@ -32,16 +32,18 @@ data_file_name = 'dentex_disease_datasplit.parquet'
 data_file = os.path.join(dentex_dir, data_file_name)
 
 # Model parameters and name
+seed = 234
 max_im_size = 550
 im_size = 224
-model_name = 'fancy240119'
+model_name = 'dtx240119'
 model_version = 1
-max_epochs = 300
+max_epochs = 200
 num_classes = 4
-num_workers = 8
+num_workers = 16
 batch_size = 64
-check_val_every_n_epoch = 1
+check_val_every_n_epoch = 2
 checkpoint_every_n_epoch = 2
+save_top_k = 10
 
 # Logs
 log_dir = os.path.join(dentex_dir, 'log')
@@ -135,12 +137,15 @@ model = ToothModel(train_dataset=train_dataset,
 checkpoint_callback = ModelCheckpoint(
     dirpath=checkpoint_dir,
     filename='{epoch}',
+    monitor='val_loss',
+    mode='min',
     save_last=True,
     every_n_epochs=checkpoint_every_n_epoch,
     save_on_train_epoch_end=True,
-    save_top_k=-1)
+    save_top_k=save_top_k)
 
 # %% Trainer instance
+seed_everything(seed=seed, workers=True)
 trainer = Trainer(accelerator='gpu',
                   max_epochs=max_epochs,
                   check_val_every_n_epoch=check_val_every_n_epoch,

@@ -37,14 +37,14 @@ max_im_size = 550
 im_size = 224
 model_name = 'dtx240122'
 model_version = 1
-max_epochs = 16
+max_epochs = 300
 num_classes = 4
-num_workers = 4
-batch_size = 14
+num_workers = 12
+batch_size = 64
 check_val_every_n_epoch = 1
 checkpoint_every_n_epoch = 2
 save_top_k = 10
-initial_learning_rate = 1.0e-3
+initial_learning_rate = 5.0e-4
 
 # Logs
 log_dir = os.path.join(dentex_dir, 'log')

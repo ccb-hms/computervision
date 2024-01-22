@@ -13,6 +13,7 @@ from typing import Any
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torchvision.models import resnet50, ResNet50_Weights
 # Lightning module
 from lightning.pytorch import LightningModule
@@ -37,7 +38,12 @@ def performance_metrics(metric_dict, logits, target, metric_prefix='train'):
 
 def average_performance_metrics(step_metrics_list, decimals=3):
     """
-    Calculate the average performance from a list of dictionaries
+    This method calculates the average performance metrics.
+    Parameters:
+    - step_metrics_list (list): A list of dictionaries where each dictionary represents the metrics for a step.
+    - decimals (int, optional): The number of decimal places to round the average metrics to. Defaults to 3.
+    Returns:
+    - average_metrics (dict): A dictionary containing the average value for each performance metric.
     """
     average_metrics = {}
     for metric in step_metrics_list[0].keys():
@@ -50,8 +56,13 @@ def average_performance_metrics(step_metrics_list, decimals=3):
 
 
 class ResNet50Model:
-    """ This is the ResNet50 model from torchvision.models
-    We use this model with nn.CrossEntropyLoss() which does NOT require a softmax at the output
+    """
+    This class represents a ResNet-50 model for image classification.
+    Attributes:
+    - n_outputs (int): The number of output classes for the model.
+    Methods:
+    - __init__(self, n_outputs=4): Initializes a new instance of the ResNet50Model class.
+    - create_model(self): Creates the ResNet-50 model with a custom fully connected layer.
     """
 
     def __init__(self, n_outputs=4):
@@ -167,17 +178,29 @@ class ToothModel(LightningModule):
 
     def configure_optimizers(self) -> OptimizerLRScheduler:
         opt = torch.optim.AdamW(self.parameters(), lr=self.lr)
-        return opt
+        scheduler = ReduceLROnPlateau(opt, mode='min', factor=0.5, patience=5)
+        lr_scheduler_config = {'scheduler': scheduler,
+                               'interval': 'epoch',
+                               'frequency': 1,
+                               'monitor': 'val_loss',
+                               'strict': False,
+                               'name': 'lr'}
+        output = {'optimizer': opt, 'lr_scheduler': lr_scheduler_config}
+        return output
 
     def on_train_epoch_end(self) -> None:
-        epoch_train_metrics = average_performance_metrics(step_metrics_list=self.train_step_metrics_list,
-                                                          decimals=self.decimals)
-        self.log_dict(epoch_train_metrics, prog_bar=True)
+        if len(self.train_step_metrics_list) > 0:
+            epoch_train_metrics = average_performance_metrics(step_metrics_list=self.train_step_metrics_list,
+                                                              decimals=self.decimals)
+            self.log_dict(epoch_train_metrics, prog_bar=False)
         self.train_step_metrics_list.clear()
 
     def on_validation_epoch_end(self) -> None:
-        epoch_val_metrics = average_performance_metrics(step_metrics_list=self.val_step_metrics_list,
-                                                        decimals=self.decimals)
-        self.log_dict(epoch_val_metrics, prog_bar=True)
+        if len(self.val_step_metrics_list) > 0:
+            epoch_val_metrics = average_performance_metrics(step_metrics_list=self.val_step_metrics_list,
+                                                            decimals=self.decimals)
+            # Manually log learning rate
+            epoch_val_metrics['val_lr'] = self.lr
+            self.log_dict(epoch_val_metrics, prog_bar=True)
         self.val_step_metrics_list.clear()
 

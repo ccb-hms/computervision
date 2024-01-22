@@ -12,7 +12,7 @@ import torch
 
 # Lightning library
 from lightning.pytorch import Trainer, seed_everything
-from lightning.pytorch.callbacks import ModelCheckpoint
+from lightning.pytorch.callbacks import ModelCheckpoint, LearningRateMonitor, LearningRateFinder
 from lightning.pytorch.loggers import TensorBoardLogger
 
 # Albumentations library
@@ -32,16 +32,19 @@ data_file_name = 'dentex_disease_datasplit.parquet'
 data_file = os.path.join(dentex_dir, data_file_name)
 
 # Model parameters and name
+seed = 234
 max_im_size = 550
 im_size = 224
-model_name = 'fancy240119'
+model_name = 'dtx240122'
 model_version = 1
 max_epochs = 300
 num_classes = 4
-num_workers = 8
+num_workers = 12
 batch_size = 64
 check_val_every_n_epoch = 1
 checkpoint_every_n_epoch = 2
+save_top_k = 10
+initial_learning_rate = 5.0e-4
 
 # Logs
 log_dir = os.path.join(dentex_dir, 'log')
@@ -128,24 +131,31 @@ model = ToothModel(train_dataset=train_dataset,
                    test_dataset=test_dataset,
                    batch_size=batch_size,
                    num_classes=num_classes,
-                   num_workers=num_workers)
+                   num_workers=num_workers,
+                   lr=initial_learning_rate)
 
 # %% Callbacks
 
 checkpoint_callback = ModelCheckpoint(
     dirpath=checkpoint_dir,
     filename='{epoch}',
+    monitor='val_loss',
+    mode='min',
     save_last=True,
     every_n_epochs=checkpoint_every_n_epoch,
     save_on_train_epoch_end=True,
-    save_top_k=-1)
+    save_top_k=save_top_k)
+
+lr_monitor = LearningRateMonitor(logging_interval='epoch',
+                                 log_momentum=True)
 
 # %% Trainer instance
+seed_everything(seed=seed, workers=True)
 trainer = Trainer(accelerator='gpu',
                   max_epochs=max_epochs,
                   check_val_every_n_epoch=check_val_every_n_epoch,
                   logger=logger,
-                  callbacks=[checkpoint_callback])
+                  callbacks=[checkpoint_callback, lr_monitor])
 
 # Run training
 trainer.fit(model)

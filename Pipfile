@@ -17,6 +17,7 @@ lightning = "*"
 torchxrayvision = "*"
 tensorflow = "*"
 dentexmodel = {file = ".", editable = true}
+pyscaffold = "*"
 
 [dev-packages]
 matplotlib = "*"

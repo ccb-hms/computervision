@@ -1,8 +1,6 @@
 FROM python:3.10.11 AS base
 
 ARG DEV_dentexmodel
-#ARG CI_USER_TOKEN
-#RUN echo "machine github.com\n  login $CI_USER_TOKEN\n" >~/.netrc
 
 ENV \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -27,8 +25,8 @@ RUN apt install 'libgl1-mesa-glx'\
     'libsm6'\
     'libxext6'  -y
 
-COPY setup.py .
-COPY src/dentexmodel/__init__.py src/dentexmodel/__init__.py
+COPY ../setup.py .
+COPY ../src/dentexmodel/__init__.py src/dentexmodel/__init__.py
 
 # Install pipenv and deploy in system python
 RUN pip install --upgrade pip
@@ -36,13 +34,12 @@ RUN pip install pipenv
 RUN mkdir -p /app
 
 # Install dependencies into system python
-COPY Pipfile .
-COPY Pipfile.lock .
+COPY ../Pipfile .
+COPY ../Pipfile.lock .
 RUN pipenv install --system --deploy --ignore-pipfile --dev
 
-# PyTorch CPU version
-RUN pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+# Install PyTorch for CUDA 12.1
+RUN pip install torch torchvision torchaudio
 
 # Run the jupyter lab server
-# ENTRYPOINT ["/bin/bash", "/app/docker_entry.sh"]
-CMD ["/bin/bash", "/app/docker_entry.sh"]
+ENTRYPOINT ["/bin/bash", "/app/bash_scripts/docker_entry.sh"]

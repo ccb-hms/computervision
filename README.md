@@ -1,4 +1,7 @@
-# DentexModel: Algorithms for the detection of abnormal teeth and associated diagnosis from panoramic x-rays
+![image info](./dentex_banner_xr.jpg)
+
+# DENTEX CHALLENGE 2023 #
+## Detection of abnormal teeth and associated diagnosis from panoramic x-rays ##
 
 Panoramic X-rays are widely used in dental practice to provide a comprehensive view of the oral cavity and aid in treatment planning for various dental conditions. 
 However, interpreting these images can be a time-consuming process that can distract clinicians from essential clinical activities. 

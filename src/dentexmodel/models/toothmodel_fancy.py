@@ -1,7 +1,6 @@
 """
-Tooth Model Fancy
-Improved model class for training and inference
-With validation steps and TensorBoard logging
+Advanced model class for training and inference
+With automated learning rate scheduling and TensorBoard logging
 Andreas Werdich
 Center for Computational Biomedicine
 Harvard Medical School
@@ -19,15 +18,26 @@ from torchvision.models import resnet50, ResNet50_Weights
 from lightning.pytorch import LightningModule
 from lightning.pytorch.utilities.types import OptimizerLRScheduler, STEP_OUTPUT
 from lightning.pytorch.utilities.types import TRAIN_DATALOADERS, EVAL_DATALOADERS
+from lightning.pytorch.callbacks import LearningRateFinder
 # Torchmetrics
 import torchmetrics.classification as tmc
 
 logger = logging.getLogger(name=__name__)
+torch.set_float32_matmul_precision(precision='high')
 
 
 def performance_metrics(metric_dict, logits, target, metric_prefix='train'):
     """
-    Calculate performance metrics for a given set of logits and target labels.
+    Calculate performance metrics for given logits and targets.
+
+    Args:
+        metric_dict (dict): Dictionary containing the metric name as key and the metric function as value.
+        logits (torch.Tensor): The predicted logits from the model.
+        target (torch.Tensor): The ground truth targets.
+        metric_prefix (str, optional): Prefix to be added to the metric name. Defaults to 'train'.
+
+    Returns:
+        dict: Dictionary containing the performance metrics with metric name prefixed by metric_prefix.
     """
     preds = nn.Softmax(dim=1)(logits)
     performance_dict = {}
@@ -55,6 +65,26 @@ def average_performance_metrics(step_metrics_list, decimals=3):
     return average_metrics
 
 
+class FineTuneLearningRateFinder(LearningRateFinder):
+    """
+    FineTuneLearningRateFinder is a class that extends the LearningRateFinder class.
+    It is used to find the optimal learning rate for fine-tuning a model during training.
+
+    Attributes:
+        milestones (List[int]): A list of epoch numbers at which the learning rate should be evaluated.
+    """
+    def __init__(self, milestones, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.milestones = milestones
+
+    def on_fit_start(self, *args, **kwargs):
+        return
+
+    def on_train_epoch_start(self, trainer, pl_module):
+        if trainer.current_epoch in self.milestones or trainer.current_epoch == 0:
+            self.lr_find(trainer, pl_module)
+
+
 class ResNet50Model:
     """
     This class represents a ResNet-50 model for image classification.
@@ -79,6 +109,35 @@ class ResNet50Model:
 
 
 class ToothModel(LightningModule):
+    """
+    This class represents a model for tooth classification using PyTorch Lightning.
+
+    Parameters:
+        - train_dataset: The dataset used for training.
+        - val_dataset: The dataset used for validation.
+        - test_dataset: The dataset used for testing.
+        - batch_size: The batch size used for training, validation, and testing.
+        - num_classes: The number of classes in the classification problem.
+        - num_workers: The number of subprocesses used for data loading. Default is 1.
+        - lr: The learning rate for the optimizer. Default is 1.0e-3.
+        - model: Optional pretrained model. If not provided, a ResNet50 model will be used.
+
+    Example usage:
+
+    train_dataset = ToothDataset(train_data)
+    val_dataset = ToothDataset(val_data)
+    test_dataset = ToothDataset(test_data)
+
+    tooth_model = ToothModel(train_dataset, val_dataset, test_dataset, batch_size=64, num_classes=10)
+
+    trainer = pl.Trainer()
+    trainer.fit(tooth_model)
+    trainer.test(tooth_model)
+
+    Note: replace `TRAIN_DATALOADERS`, `EVAL_DATALOADERS`, `STEP_OUTPUT`, `OptimizerLRScheduler` with the appropriate
+    types.
+    """
+
     def __init__(self,
                  train_dataset,
                  val_dataset,
@@ -203,4 +262,3 @@ class ToothModel(LightningModule):
             epoch_val_metrics['val_lr'] = self.lr
             self.log_dict(epoch_val_metrics, prog_bar=True)
         self.val_step_metrics_list.clear()
-

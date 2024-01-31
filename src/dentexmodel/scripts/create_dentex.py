@@ -24,7 +24,7 @@ Path(data_dir).mkdir(parents=True, exist_ok=True)
 url = 'https://dsets.s3.amazonaws.com/dentex/dentex-quadrant-enumeration-disease.tar.gz'
 
 
-def val_test_split(df, label_col, n_test_per_class=30, n_val_per_class=15, seed=123):
+def val_test_split(df, label_col, n_test_per_class=30, n_val_per_class=30, seed=123):
     dset_df = df.copy().sample(frac=1, random_state=np.random.seed(seed)). \
         assign(dataset=None, cl=None).reset_index(drop=True)
     dataset_list = ['test', 'val']

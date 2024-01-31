@@ -1,5 +1,4 @@
 """
-toothmodel1.py
 Minimal model code for training and inference
 Andreas Werdich
 Center for Computational Biomedicine
@@ -20,13 +19,20 @@ from lightning.pytorch import LightningModule
 from lightning.pytorch.utilities.types import TRAIN_DATALOADERS, OptimizerLRScheduler, STEP_OUTPUT
 
 logger = logging.getLogger(name=__name__)
+torch.set_float32_matmul_precision(precision='high')
 
 
 class ResNet50Model:
-    """ This is the ResNet50 model from torchvision.models
-    We use this model with nn.CrossEntropyLoss() which does NOT require a softmax at the output
     """
 
+    Class: ResNet50Model
+
+    A class representing a ResNet-50 model with customizable number of outputs.
+
+    Methods: - __init__(self, n_outputs=4): Initializes a new instance of the ResNet50Model class with the specified
+    number of outputs. - create_model(self): Creates and returns a ResNet-50 model with the specified number of outputs.
+
+    """
     def __init__(self, n_outputs=4):
         self.n_outputs = n_outputs
 
@@ -41,6 +47,36 @@ class ResNet50Model:
 
 
 class ToothModel(LightningModule):
+    """
+    ToothModel
+
+    This class represents a PyTorch Lightning module for training and predicting tooth models.
+
+    Attributes:
+        train_dataset (Dataset): The training dataset.
+        batch_size (int): The batch size for data loading.
+        num_workers (int, optional): The number of workers for data loading. Defaults to 1.
+        lr (float, optional): The learning rate for the optimizer. Defaults to 1.0e-3.
+        model (nn.Module, optional): The pre-trained model. Defaults to None.
+        decimals (int): The number of decimal places to round floating point numbers to.
+
+    Methods:
+        train_dataloader() -> TRAIN_DATALOADERS:
+            Returns the training dataloader for the module.
+
+        forward(x, *args: Any, **kwargs: Any) -> Any:
+            Performs a forward pass through the model.
+
+        training_step(batch, batch_idx, *args: Any, **kwargs: Any) -> STEP_OUTPUT:
+            Performs a training step on a batch of data.
+
+        predict_step(batch, batch_idx, *args: Any, **kwargs: Any) -> Any:
+            Performs a prediction step on a batch of data.
+
+        configure_optimizers() -> OptimizerLRScheduler:
+            Configures the optimizer and learning rate scheduler for training.
+
+    """
     def __init__(self,
                  train_dataset,
                  batch_size,

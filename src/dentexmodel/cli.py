@@ -26,5 +26,5 @@ parser = argparse.ArgumentParser(description='PyTorch Workflow')
 def main(args=None):
     # We will add command line argument later.
     args = parser.parse_args(args=args)
-    dataset = create_dentex()
-    print(f'Created image dataset with {len(dataset)} images in /data directory.')
+    create_dentex()
+    print(f'Finished creating the Dentex data sets.')

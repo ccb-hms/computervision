@@ -4,7 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-dentexmodel = {file = ".", editable = true}
 setuptools = "*"
 setuptools-scm = "*"
 tox = "*"
@@ -20,6 +19,7 @@ tqdm = "*"
 albumentations = "*"
 lightning = "*"
 tensorflow = "*"
+dentexmodel = {file = ".", editable = true}
 
 [dev-packages]
 jupyterlab = "*"

@@ -1,3 +1,9 @@
+"""
+File operations including downloading and extracting
+Andreas Werdich
+Center for Computational Biomedicine
+"""
+
 import os
 import shutil
 import logging
@@ -6,7 +12,6 @@ import traceback
 from urllib import request
 from urllib.error import HTTPError
 import gzip
-from skimage import io
 from tqdm import tqdm
 import numpy as np
 
@@ -24,10 +29,22 @@ class DownloadProgressBar(tqdm):
 
 class FileOP:
     """
-    JSON file operations
-    :param data_output_dir outputs dir for write_to_disk method
-    """
+    Class for file operations including downloading, extracting and file size checking.
 
+    Parameters:
+    - data_output_dir (Optional[str]): The directory to store the downloaded files.
+
+    Attributes:
+    - data_output_dir (str): The directory to store the downloaded files.
+    - url (None or str): The URL of the file to download.
+
+    Methods:
+    - unzip(in_file: str, out_file: str) -> int: Unzips a .gz file and returns the file size.
+    - file_size_from_url(url: str) -> int: Gets the size of a file without downloading it.
+    - download_from_url(url: str, download_dir: str, extract: bool = True, delete_after_extract: bool = False, ext_list: Optional[List[str]] = None) -> str: Downloads a file from a URL and
+    * returns the file path.
+
+    """
     def __init__(self, data_output_dir=None):
         self.data_output_dir = data_output_dir
         self.url = None

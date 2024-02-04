@@ -44,4 +44,4 @@ COPY Pipfile Pipfile.lock ./
 RUN pipenv install --system --deploy --ignore-pipfile --dev
 
 # Run the jupyter lab server
-ENTRYPOINT ["/bin/bash", "/app/bash_scripts/docker_entry.sh"]
+CMD ["/bin/bash", "/app/bash_scripts/docker_entry.sh"]

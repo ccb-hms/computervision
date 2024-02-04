@@ -1,6 +1,10 @@
 # DENTEX CHALLENGE 2023 #
 
-![image info](./dentex_banner_xr.jpg)
+<p float="left">
+    <img style="vertical-align: top" src="./images/dentex_banner.jpg" width="30%" />
+    <img style="vertical-align: top" src="./images/train_195_boxes.png" width="40%" />
+    
+</p>
 
 ## Detection of abnormal teeth and associated diagnosis from panoramic x-rays ##
 

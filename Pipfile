@@ -20,6 +20,7 @@ albumentations = "*"
 lightning = "*"
 tensorflow = "*"
 dentexmodel = {file = ".", editable = true}
+grad-cam = "*"
 
 [dev-packages]
 jupyterlab = "*"

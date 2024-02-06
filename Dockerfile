@@ -28,7 +28,8 @@ RUN apt-get update -y && \
     'libgl1-mesa-glx' \
     'ffmpeg' \
     'libsm6' \
-    'libxext6'
+    'libxext6' \
+    'ninja-build'
 
 
 # Pip and pipenv
@@ -42,6 +43,9 @@ COPY src/dentexmodel/__init__.py src/dentexmodel/__init__.py
 # Install dependencies into system python
 COPY Pipfile Pipfile.lock ./
 RUN pipenv install --system --deploy --ignore-pipfile --dev
+
+# Build Detectron2 from source
+RUN python3 -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
 
 # Run the jupyter lab server
 CMD ["/bin/bash", "/app/bash_scripts/docker_entry.sh"]

@@ -15,7 +15,7 @@ from dentexmodel.fileutils import FileOP
 logger = logging.getLogger(__name__)
 
 
-def val_test_split(data, label_col, n_test_per_class=30, n_val_per_class=30, random_state=123):
+def val_test_split(data, label_col=None, n_test_per_class=30, n_val_per_class=30, random_state=123):
     """
     Splits the given data into training, validation, and test sets based on the specified parameters.
     Args:
@@ -30,16 +30,24 @@ def val_test_split(data, label_col, n_test_per_class=30, n_val_per_class=30, ran
     """
     image_numbers = {'test': n_test_per_class,
                      'val': n_val_per_class}
-    labels = data[label_col].unique()
     dset_df = data.copy().sample(frac=1, random_state=random_state). \
         assign(dataset=None).reset_index(drop=True)
     for dataset in image_numbers.keys():
-        for label in labels:
+        if label_col is not None:
+            labels = dset_df[label_col].unique()
+            for label in labels:
+                np.random.seed(random_state)
+                idx_list = np.random.choice(dset_df. \
+                                            loc[(dset_df[label_col] == label) & (dset_df['dataset'].isnull())]. \
+                                            index, size=image_numbers.get(dataset), replace=False)
+                dset_df.loc[dset_df.index.isin(idx_list), 'dataset'] = dataset
+        else:
             np.random.seed(random_state)
-            idx_list = np.random.choice(dset_df.\
-                                        loc[(dset_df[label_col] == label) & (dset_df['dataset'].isnull())].\
+            idx_list = np.random.choice(dset_df. \
+                                        loc[dset_df['dataset'].isnull()].\
                                         index, size=image_numbers.get(dataset), replace=False)
             dset_df.loc[dset_df.index.isin(idx_list), 'dataset'] = dataset
+
     # Use the remaining samples for training
     dset_df.loc[dset_df['dataset'].isnull(), 'dataset'] = 'train'
     return dset_df
@@ -51,20 +59,21 @@ class DentexData:
         self.annotations = None
         self.data_dir = data_dir
         self.classification_url = 'https://dsets.s3.amazonaws.com/dentex/dentex-quadrant-enumeration-disease.tar.gz'
+        self.detection_url = 'https://dsets.s3.amazonaws.com/dentex/dentex-quadrant-enumeration.tar.gz'
         if not os.path.exists(self.data_dir):
             logger.warning('Data directory does not exist')
 
-    def create_category_dict(self):
+    def create_category_dict(self, categories=None):
         """
-            Creates a dictionary of categories with their corresponding IDs and names.
-            Returns:
-                category_dict (dict): A dictionary where the keys are category names and the values are dictionaries
-                containing the IDs and names of the categories.
-            Note:
-                - The category names follow the format 'categories_{category_id}', where category_id ranges from 1 to 3.
-                - The data used to create the dictionary is fetched from the `annotations` attribute of the object.
+        Create a dictionary of categories.
+        :param categories: A list of category IDs. Default is None.
+        :type categories: list, optional
+        :return: A dictionary containing category names as keys and a sub-dictionary as values.
+                 The sub-dictionary contains category IDs as keys and category names as values.
+        :rtype: dict
         """
-        categories = range(1, 4)
+        if categories is None:
+            categories = range(1, 4)
         category_dict = {}
         if self.annotations is not None:
             for category_id in categories:

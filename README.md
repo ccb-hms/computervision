@@ -1,56 +1,56 @@
-# DENTEX CHALLENGE 2023 #
-
 <p float="left">
-    <img style="vertical-align: top" src="./images/dentex_banner.jpg" width="30%" />
+    <img style="vertical-align: top" src="./images/ccb_logo_text.jpeg" width="50%" />
     <img style="vertical-align: top" src="./images/train_195_boxes.png" width="40%" />
     
 </p>
 
-## Detection of abnormal teeth and associated diagnosis from panoramic x-rays ##
+# The CCB Computer Vision Repository #
 
-Panoramic X-rays are widely used in dental practice to provide a comprehensive view of the oral cavity and aid in treatment planning for various dental conditions. 
-However, interpreting these images can be a time-consuming process that can distract clinicians from essential clinical activities. 
-Moreover, misdiagnosis is a significant concern, as general practitioners may lack specialized training in radiology, and communication errors can occur due to work exhaustion.
+This repository contains code examples as a starting point for new computer vision projects. 
+All frameworks, libraries and data sets are open source and publicly available.
 
-## Background
+## Docker containers to create a reproducible environment ##
 
-https://dentex.grand-challenge.org/
-
-The primary objective of this challenge is to develop algorithms that can accurately detect abnormal teeth with dental enumeration and associated diagnosis. 
-This not only aids in accurate treatment planning but also helps practitioners carry out procedures with a low margin of error.
-
-## Docker container to create a reproducible environment
-
-The notebooks, modules and functions in this repository can be used with any virtual environment. 
-However, I am including a Docker file so that the project code can be examined in a reproducible 
-environment with python 3.10.11 and all dependencies installed.
-
-To build the docker container and start a jupyter notebook, use the following commands:
+The included docker file can be used to create a reproducible environment in a docker 
+container with all required dependencies installed.
 
 ```bash
-docker compose build # Downloads the python image and builds the container with dependencies
-docker compose up # Starts Jupyter Notebook server inside the container. Just click on the link.
+# Create a docker image from the included docker file
+docker compose build
+# Create a container and run a jupyter lab server
+docker compose -f docker-compose-cpu.yml up
 
+# The default docker-compose.yml file is configured to use 
+# the NVIDIA Container Toolkit runtime. 
+# Create a container with the container toolkit installed
+docker compose up 
 ```
 
-#### Dependencies
+## Docker with GPU support ##
 
-This package requires dependencies. Rather than using a requirements.txt file, we
+The NVIDIA Container Toolkit is a set of tools designed to enable GPU-accelerated applications to run within Docker containers. 
+This toolkit facilitates the integration of NVIDIA GPUs with container runtimes, 
+allowing developers and data scientists to harness the power of GPU computing in containerized environments.
+See the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) page for installation instructions.
+
+### Dependencies ###
+
+This package requires dependencies. 
+If you are using the Docker environment, you should be good to go.
+Rather than using a requirements.txt file, we
 will use [pipenv](https://pipenv.readthedocs.io/en/latest/) to provide a pure, repeatable, application environment.
-
-#### Installation
-
-If you are using the Docker environment, you should be good to go.  Mac/windows
-users should [install pipenv](https://pipenv.readthedocs.io/en/latest/#install-pipenv-today) into
+Mac/windows users should [install pipenv](https://pipenv.readthedocs.io/en/latest/#install-pipenv-today) into
 their main python environment as instructed.  Unfortunately, using pipenv or
-other virtual environments inside a conda environment is not  recommended.
+other virtual environments inside a conda environment is not recommended.
 
 ```bash
-pipenv install --dev
-pipenv run python some_python_file
+# Create a pipenv environment with all dependencies
+pipenv install -e . --dev
+# Run jupyter lab
+pipenv run jupyter lab
 ```
 
 ### Download links
 
-Dentex data: https://zenodo.org/records/7812323#.ZDQE1uxBwUG (11GB training, 150MB validation)
+The data set: https://zenodo.org/records/7812323#.ZDQE1uxBwUG (11GB training, 150MB validation)
 

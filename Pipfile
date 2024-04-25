@@ -18,8 +18,8 @@ albumentations = "*"
 lightning = "*"
 grad-cam = "*"
 tensorflow = "==2.15"
-dentexmodel = {file = ".", editable = true}
 python-dotenv = "*"
+dentexmodel = {file = ".", editable = true}
 
 [dev-packages]
 jupyterlab = "*"

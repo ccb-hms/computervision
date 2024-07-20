@@ -34,11 +34,8 @@ computervision
 ==============
 
 
-    Add a short description here!
-
-
-A longer description of your project goes here...
-
+UNDER CONSTRUCTION. PLEASE CHECK BACK IN A COUPLE OF DAYS. 
+SORRY FOR THE INCONVENIENCE!
 
 .. _pyscaffold-notes:
 

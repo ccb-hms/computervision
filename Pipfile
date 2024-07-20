@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 tox = "*"
 cython = "*"
-computervision = {file = ".", editable = true}
 pyscaffold = "*"
 pandas = "*"
 pyarrow = "*"
@@ -15,6 +14,18 @@ scikit-learn = "*"
 scikit-image = "*"
 opencv-python = "*"
 tqdm = "*"
+albumentations = "*"
+lightning = "*"
+grad-cam = "*"
+tensorflow = ">=2.15"
+jupyterlab = "*"
+ipywidgets = "*"
+matplotlib = "*"
+seaborn = "*"
+pytest = "*"
+pytest-cov = "*"
+python-dotenv = "*"
+computervision = {file = ".", editable = true}
 
 [dev-packages]
 

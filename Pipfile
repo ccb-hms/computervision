@@ -7,6 +7,14 @@ name = "pypi"
 tox = "*"
 cython = "*"
 computervision = {file = ".", editable = true}
+pyscaffold = "*"
+pandas = "*"
+pyarrow = "*"
+fastparquet = "*"
+scikit-learn = "*"
+scikit-image = "*"
+opencv-python = "*"
+tqdm = "*"
 
 [dev-packages]
 

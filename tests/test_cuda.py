@@ -39,3 +39,7 @@ def test_cuda():
         AssertionError: If the device is not a CUDA device.
     """
     assert get_device().type == 'cuda', f'{get_device()} is not a CUDA device'
+
+if __name__ == "__main__":
+    device = get_device()
+    test_cuda()

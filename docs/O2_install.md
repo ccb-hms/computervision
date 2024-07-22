@@ -6,7 +6,7 @@
 
 Log into the cluster using your Harvard Medical School credentials along with two-factor authentication. 
 For detailed instructions on logging into the O2, please refer to the 
-[O2 WIKI page]((https://harvardmed.atlassian.net/wiki/spaces/O2/pages/1601700123/How+to+login+to+O2)
+[O2 WIKI page](https://harvardmed.atlassian.net/wiki/spaces/O2/pages/1601700123/How+to+login+to+O2)
 Once logged in, request an interactive partition with a GPU. 
 Below are the commands to get a list of available GPU cards and submit an interactive GPU job 
 using the *srun* command:
@@ -24,9 +24,9 @@ nvidia-smi
 ```
 Note:
 The current NVIDIA driver version is shown in the top left corner of the output. 
-To run CUDA 12.1.x, the NVIDIA driver version must be >= 525.60.13, as mentioned 
+To run CUDA 12.1.x which we use for this code, the NVIDIA driver version must be >= 525.60.13, as mentioned 
 in the 
-[NVIDIA CUDA Toolkit Release Notes](https://docs.nvidia.com/cuda/archive/12.2.1/cuda-toolkit-release-notes/index.html). Some of the GPU servers running older cards have not yet been upgraded
+[NVIDIA CUDA Toolkit Release Notes](https://docs.nvidia.com/cuda/archive/12.2.1/cuda-toolkit-release-notes/index.html).
 Some of the oder GPU servers have not been upgraded to the required GPU driver version and might
 fail the CUDA tests. This problem, however, does not affect the installation process 
 and the test will run successfully on a GPU with the required driver version.
@@ -35,9 +35,10 @@ with the following command.
 ```bash
 srun -n 1 --pty -t 3:00:00 -p gpu --gres=gpu:teslaM40:1 /bin/bash
 ```
-The first step is to load the module for the correct python version. 
-List of installed Python versions on O2 and load the specified modules 
-for Python 3.10.11 (recommended version for the computer vision repository) as follows:
+The first step is to load a module for the recommended python version. 
+A list of available Python versions can be obtained with the 
+*module spider* command. Python 3.10.11 (recommended version for the computer vision repository) 
+can be loaded as follows:
 ```bash
 # To view all available Python versions, run:
 module spider python
@@ -67,7 +68,7 @@ It is crucial that the correct Python version is loaded.
 # To install pipx in your home directory, run:
 pip install -U --user pipx
 ```
-If the pipx command is unavailable, you'll receive a "command not found" error. 
+If the pipx command is unavailable, you will receive a "command not found" error. 
 Resolve this by appending the ~/.local/bin directory to your PATH variable in bash_profile with the following commands:
 ```bash
 # Run pipx with --help flag

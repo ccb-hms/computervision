@@ -16,12 +16,26 @@ using the *srun* command:
 sinfo  --Format=nodehost,available,memory,statelong,gres:40 -p gpu
 
 # To request an interactive partition (for a duration of three hours), run:
-srun -n 1 --pty -t 0:03:00 -p gpu --gres=gpu:1 /bin/bash
+srun -n 1 --pty -t 3:00:00 -p gpu --gres=gpu:1 /bin/bash
 ```
 Confirm your access to the GPU by using the nvidia-smi command.
 ```bash
 nvidia-smi
 ```
+Note:
+The current NVIDIA driver version is shown in the top left corner of the output. 
+To run CUDA 12.1.x, the NVIDIA driver version must be >= 525.60.13, as mentioned 
+in the 
+[NVIDIA CUDA Toolkit Release Notes](https://docs.nvidia.com/cuda/archive/12.2.1/cuda-toolkit-release-notes/index.html). Some of the GPU servers running older cards have not yet been upgraded
+Some of the oder GPU servers have not been upgraded to the required GPU driver version and might
+fail the CUDA tests. This problem, however, does not affect the installation process 
+and the test will run successfully on a GPU with the required driver version.
+To be sure, you can request a specific gpu card, for example a Tesla M40 card 
+with the following command.
+```bash
+srun -n 1 --pty -t 3:00:00 -p gpu --gres=gpu:teslaM40:1 /bin/bash
+```
+The first step is to load the module for the correct python version. 
 List of installed Python versions on O2 and load the specified modules 
 for Python 3.10.11 (recommended version for the computer vision repository) as follows:
 ```bash
@@ -87,4 +101,36 @@ mkdir .venv
 # Pipenv will use the .venv folder for the virtual environment
 pipenv install -e . --python=3.10.11 --dev
 ```
+After installation, we can test the package and the new environment.
+```bash
+# Activate the python environment
+pipenv shell
+# Run the tests in the ./tests
+python -m pytest
+```
+After completing installation and running the pytest app, the test session should complete
+without any errors. The output after running the tests should look like this:
+
+<p float="left">
+    <img style="vertical-align: top" src="../images/screenshot_pytest.png" width="70%" />
+</p>
+
+## Running Jupyter Lab on the O2 portal ##
+
+To run the jupyter notebooks in the computervision/notebooks directory, 
+we recommend creating a jupyter lab session from the
+[O2portal](https://o2portal.rc.hms.harvard.edu/pun/sys/dashboard).
+
+The tool can be directed to start a Jupyter Lab server using the python environment 
+that you just created from above.
+
+This step requires a successful installation of the *computervision* repository 
+with GPU support as described above. Activation of the environment from the O2 portal 
+requires running the activation script in the ./bash_scripts directory. Note the location of the 
+*activate.sh* script.
+
+
+
+
+
 

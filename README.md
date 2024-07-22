@@ -83,7 +83,7 @@ This toolkit facilitates the integration of NVIDIA GPUs with container runtimes,
 allowing developers and data scientists to harness the power of GPU computing in containerized environments.
 See the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) page for installation instructions.
 
-### Install without Docker ###
+## Install without Docker ##
 
 If you are using the Docker environment, you should be good to go.
 For installation in a local environment we use 
@@ -105,6 +105,13 @@ pipenv install -e . --dev
 # Run jupyter lab
 pipenv run jupyter lab
 ```
+
+### Install on O2 at Harvard Medical School ###
+[Install on O2 at Harvard Medical School](./docs/O2_install.md)
+<p>
+    <img style="vertical-align: top" src="./images/cloud_computing_640.jpg" width="25%" />
+</p>
+
 
 <img src="https://user-images.githubusercontent.com/12534576/192582340-4c9e4401-1fe6-4dbb-95bb-fdbba5493f61.png"/>
 

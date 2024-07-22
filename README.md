@@ -87,7 +87,7 @@ See the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-nati
 
 If you are using the Docker environment, you should be good to go.
 For installation in a local environment we use 
-[pipenv](https://pipenv.readthedocs.io/en/latest/) to provide a pure, repeatable, application environment.
+[Pipenv](https://pipenv.readthedocs.io/en/latest/) to provide a pure, repeatable, application environment.
 Mac/windows users should [install pipenv](https://pipenv.readthedocs.io/en/latest/#install-pipenv-today) into
 their main python environment as instructed. 
 Pipenv is a packaging tool for Python that solves some common problems 
@@ -111,9 +111,9 @@ pipenv run jupyter lab
 O2 is the linux-based high-performance computing platform at 
 Harvard Medical School. The platform is managed by the Research Computing Group, part of [HMS IT](http://it.hms.harvard.edu/), and documented
 on the [O2 documentation website](https://harvardmed.atlassian.net/wiki/spaces/O2/overview?homepageId=1586790623).
-The cluster does not support Docker at this time, so please follow the instructions to get started with 
-the computer vision repository and Jupyter Notebooks [here](./docs/O2_install.md).
-
+The cluster does not support Docker at this time, so we recommend creating a 
+virtual environment using [Pipenv](https://pipenv.readthedocs.io/en/latest/) as above. Or, follow the instructions to get started with 
+the computer vision repository and Jupyter Notebooks on O2 [here](./docs/O2_install.md).
 
 <img src="https://user-images.githubusercontent.com/12534576/192582340-4c9e4401-1fe6-4dbb-95bb-fdbba5493f61.png"/>
 

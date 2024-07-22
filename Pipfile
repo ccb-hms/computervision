@@ -24,6 +24,8 @@ matplotlib = "*"
 seaborn = "*"
 ipywidgets = "*"
 jupyterlab = "*"
+pytest = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.10"

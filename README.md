@@ -106,11 +106,13 @@ pipenv install -e . --dev
 pipenv run jupyter lab
 ```
 
-### Install on O2 at Harvard Medical School ###
-[Install on O2 at Harvard Medical School](./docs/O2_install.md)
-<p>
-    <img style="vertical-align: top" src="./images/cloud_computing_640.jpg" width="25%" />
-</p>
+<h3>Install on O2 at Harvard Medical School <img align="center" width="20%" src=./images/cloud_computing_640.jpg></h3>
+
+O2 is the linux-based high-performance computing platform at 
+Harvard Medical School. The platform is managed by the Research Computing Group, part of [HMS IT](http://it.hms.harvard.edu/), and documented
+on the [O2 documentation website](https://harvardmed.atlassian.net/wiki/spaces/O2/overview?homepageId=1586790623).
+The cluster does not support Docker at this time, so please follow the instructions to get started with 
+the computer vision repository and Jupyter Notebooks [here](./docs/O2_install.md).
 
 
 <img src="https://user-images.githubusercontent.com/12534576/192582340-4c9e4401-1fe6-4dbb-95bb-fdbba5493f61.png"/>

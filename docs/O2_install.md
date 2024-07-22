@@ -1,6 +1,5 @@
 <p float="left">
-    <img style="vertical-align: top" src="../images/ccb_logo_text.jpeg" width="50%" />
-    <img style="vertical-align: top" src="../images/train_195_boxes.png" width="40%" />
+    <img style="vertical-align: top" src="../images/cloud_computing_640_2.jpg" width="50%" />
 </p>
 
 ## Run Notebooks on O2 ##

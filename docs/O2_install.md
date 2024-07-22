@@ -1,5 +1,5 @@
 <p float="left">
-    <img style="vertical-align: top" src="../images/cloud_computing_640_2.jpg" width="50%" />
+    <img style="vertical-align: top" src="../images/cloud_computing_640_3.jpg" width="50%" />
 </p>
 
 ## Python and CUDA Module Setup ##

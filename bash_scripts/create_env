@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# This bash script activates the pipenv environment
+# in the parent directory.
+
+# Replace this with the data directory that you want 
+dir="$HOME/dtxdata"
+export DATA_ROOT=$dir
+
+if [ ! -d $dir ]
+then
+	 echo "Creating data directory"
+     mkdir -p $dir
+else
+     echo "Directory exists. No need to create it."
+fi
+
+echo $dir
+printf "DATA_ROOT=$dir" > ../.env

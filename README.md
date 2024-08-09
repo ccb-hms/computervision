@@ -105,6 +105,21 @@ pipenv install -e . --dev
 # Run jupyter lab
 pipenv run jupyter lab
 ```
+The notebooks use an environment variable called `DATA_ROOT` to keep track of the data files.
+For use running the notebooks within a docker container, this variable is defined in the Dockerfile
+as `DATA_ROOT=/app/docker`. For use without docker, you can define your own variable, or run the
+bash script in `computervision/bash_scripts/create_env`:
+```bash
+cd computervision/bash_scripts
+chmod +x ./create_env
+source ./create_env
+```
+This creates a `.env` file in the project directory which is then automatically read by pipenv when 
+the jupyter lab server is started with:
+```bash
+pipenv run jupyter lab
+```
+
 ### Install on O2 at Harvard Medical School ###
 <h3><img align="center" width="25%" src=./images/cloud_computing_640_3.jpg></h3>
 

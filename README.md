@@ -1,5 +1,5 @@
 <p float="left">
-    <img style="vertical-align: top" src="./images/ccb_logo_text.jpeg" width="50%" />
+    <img style="vertical-align: top" src="./images/HMS_DBMI_Logo.png" width="50%" />
     <img style="vertical-align: top" src="./images/train_195_boxes.png" width="40%" />
 </p>
 
@@ -84,8 +84,6 @@ allowing developers and data scientists to harness the power of GPU computing in
 See the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) page for installation instructions.
 
 ## Install without Docker ##
-
-If you are using the Docker environment, you should be good to go.
 For installation in a local environment we use 
 [Pipenv](https://pipenv.readthedocs.io/en/latest/) to provide a pure, repeatable, application environment.
 Mac/windows users should [install pipenv](https://pipenv.readthedocs.io/en/latest/#install-pipenv-today) into
@@ -94,10 +92,6 @@ Pipenv is a packaging tool for Python that solves some common problems
 associated with the typical workflow using pip, virtualenv, and the good old requirements.txt. 
 It combines the functionalities of pip and virtualenv into one tool, 
 providing a smooth and convenient workflow for developers.
-
-With Pipenv, project dependencies and the virtual environment can be managed easily. 
-It uses a Pipfile and Pipfile.lock to keep track of project dependencies with 
-package versions, similar to how package.json works in Node.js projects or Gemfile in Ruby.
 
 ```bash
 # Create a pipenv environment with all dependencies
@@ -119,7 +113,6 @@ the jupyter lab server is started with:
 ```bash
 pipenv run jupyter lab
 ```
-
 ### Install on O2 at Harvard Medical School ###
 <h3><img align="center" width="25%" src=./images/cloud_computing_640_3.jpg></h3>
 
@@ -130,9 +123,9 @@ The cluster does not support Docker at this time, so we recommend creating a
 virtual environment using [Pipenv](https://pipenv.readthedocs.io/en/latest/) as above. Or, follow the instructions to get started with 
 the computer vision repository and Jupyter Notebooks on O2 [here](./docs/O2_install.md).
 
-<img src="https://user-images.githubusercontent.com/12534576/192582340-4c9e4401-1fe6-4dbb-95bb-fdbba5493f61.png"/>
+## Label Studio ##
 
-Label Studio is an open-source data labeling tool for labeling, annotating, 
+[Label Studio](https://labelstud.io/) is an open-source data labeling tool for labeling, annotating, 
 and exploring many different data types. 
 Additionally, the tool includes a powerful machine learning interface that can be used for new model training, 
 active learning, supervised learning, and many other training techniques.
@@ -148,7 +141,6 @@ active learning, supervised learning, and many other training techniques.
 6. Scalability: Label Studio can be deployed in any environment, be it on a local machine or in a distributed setting, making it a scalable solution.
 
 ### How to Use Label Studio
-
 The tool is included in this repository as a [submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
 When you clone the main project, by default the directory that contains the submodule is included,
 but without the files. Those can be installed when needed:

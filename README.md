@@ -1,3 +1,8 @@
+[![Pyscaffold](https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold)](
+https://pyscaffold.org/)
+[![Python 3.10](
+https://img.shields.io/badge/python-3.10-blue.svg)](
+https://www.python.org/downloads/release/python-31012/)
 <p float="left">
     <img style="vertical-align: top" src="./images/train_195_boxes.png" width="40%" />
 </p>

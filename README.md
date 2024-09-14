@@ -120,9 +120,8 @@ pipenv run jupyter lab
 O2 is the Linux-based high-performance computing platform at 
 Harvard Medical School. The platform is managed by the Research Computing Group, part of [HMS IT](http://it.hms.harvard.edu/), and documented
 on the [O2 documentation website](https://harvardmed.atlassian.net/wiki/spaces/O2/overview?homepageId=1586790623).
-The cluster does not support Docker at this time, so we recommend creating a 
-virtual environment using [Pipenv](https://pipenv.readthedocs.io/en/latest/) as above. Or, follow the instructions to get started with 
-the computer vision repository and Jupyter Notebooks on O2 [here](./docs/O2_install.md).
+The cluster does not support Docker at this time. To install this package incl. the detectron2 library,
+follow the [instructions to install on O2](./docs/O2_install.md).
 
 ## Label Studio ##
 

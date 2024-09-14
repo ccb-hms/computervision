@@ -2,9 +2,9 @@
     <img style="vertical-align: top" src="../images/cloud_computing_640_3.jpg" width="50%" />
 </p>
 
-## Installing the Computer Vision Repository on the O2 High-Performance Computing Cluster ##
+### Installing the Computer Vision Repository on the O2 High-Performance Computing Cluster ###
 
-## Request GPU partition and load the python 3.10 module ##
+#### Request GPU partition and load the python 3.10 module ####
 
 1. Log in to the O2 cluster using your Harvard Medical School credentials combined with two-factor authentication. 
 Follow the instructions provided on the [O2 WIKI page](https://harvardmed.atlassian.net/wiki/spaces/O2/pages/1601700123/How+to+login+to+O2). 
@@ -45,7 +45,7 @@ module spider python/3.10.11
 # Load python 3.10 module
 module load python/3.10.11
 ````
-## Install the Pipenv package manager tool ##
+#### Install the Pipenv package manager tool ####
 1. Install pipenv using pipx to create a virtual environment for the dependencies specified in the Pipfile. 
 Make sure that the correct Python version (3.10.11) is in use. The command: `which python` should 
 return the correct version number.
@@ -114,7 +114,7 @@ The output after running the tests should look like this:
     <img style="vertical-align: top" src="../images/screenshot_pytest.png" width="70%" />
 </p>
 
-## Running Jupyter Lab on the O2 portal ##
+#### Running Jupyter Lab on the O2 portal ####
 
 To run the Jupyter notebooks in the computervision/notebooks directory, 
 we recommend creating a Jupyter lab session from 

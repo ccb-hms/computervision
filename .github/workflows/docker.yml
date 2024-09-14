@@ -1,0 +1,25 @@
+name: docker
+on:
+  pull_request:
+  push:
+    branches:
+      - develop
+      - main
+jobs:
+  test:
+    name: Run tests in docker container
+    runs-on: ubuntu-latest
+    env:
+      COMPOSE_FILE: docker-compose.yml
+      DOCKER_USER: ${{ secrets.DOCKER_USER }}
+      DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Build docker images
+      run: docker compose build
+
+    - name: Run tests
+      run: docker compose run app python -m pytest

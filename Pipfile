@@ -4,7 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-computervision = {file = ".", editable = true}
 tox = "*"
 cython = "*"
 pyscaffold = "*"
@@ -20,14 +19,13 @@ lightning = "*"
 grad-cam = "*"
 tensorflow = "==2.15"
 python-dotenv = "*"
-detectron2 = {git = "git+https://github.com/facebookresearch/detectron2.git"}
+computervision = {file = ".", editable = true}
 
 [dev-packages]
 jupyterlab = "*"
 ipywidgets = "*"
 matplotlib = "*"
 seaborn = "*"
-computervision = {file = ".", editable = true}
 
 [requires]
 python_version = "3.10"

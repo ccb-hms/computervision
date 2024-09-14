@@ -1,6 +1,6 @@
 import torch
 
-__author__ = "Center for Computational Biomedicine at Harvard Medical School"
+__author__ = "Core for Computational Biomedicine at Harvard Medical School"
 __copyright__ = "Center for Computational Biomedicine"
 __license__ = "CC-BY-4.0"
 

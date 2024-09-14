@@ -4,7 +4,7 @@
 
 ## Installing the Computer Vision Repository on the O2 High-Performance Computing Cluster ##
 
-## Python and CUDA Module Setup ##
+## Request GPU partition and load the python 3.10 module ##
 
 1. Log in to the O2 cluster using your Harvard Medical School credentials combined with two-factor authentication. 
 Follow the instructions provided on the [O2 WIKI page](https://harvardmed.atlassian.net/wiki/spaces/O2/pages/1601700123/How+to+login+to+O2). 
@@ -41,35 +41,24 @@ module spider python
 
 # View module load instructions for Python 3.10.11:
 module spider python/3.10.11
-````
-```bash
-# Load Python 3.10.11:
+
+# Load python 3.10 module
 module load python/3.10.11
-```
-5. Load the CUDA 12.1 module:
-```bash
-# To view available CUDA versions, use:
-module spider cuda
-
-# To load both gcc 9.2.0 and CUDA 12.1, run:
-module load gcc/9.2.0 && module load cuda/12.1
-
-# To confirm CUDA library availability, run:
-nvcc --version
-```
-## Setting up the pipenv virtual environment and dependencies ##
+````
+## Install the Pipenv package manager tool ##
 1. Install pipenv using pipx to create a virtual environment for the dependencies specified in the Pipfile. 
-Ensure that the correct Python version is in use.
+Make sure that the correct Python version (3.10.11) is in use. The command: `which python` should 
+return the correct version number.
 ```bash
 # To install pipx in your home directory, run:
-pip install -U --user pipx
+python -m pip install -U --user pipx
 ```
 If the pipx command is not available, extend your PATH variable in the bash_profile to include the ~/.local/bin directory:
 ```bash
 # Run pipx with --help flag
 pipx --help
 
-# If "command not found" error occurs, add $HOME/.local/bin to your PATH variable
+# If "command not found" error occurs, the add $HOME/.local/bin to your PATH variable
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bash_profile
 
 # Activate the new profile setting
@@ -85,28 +74,39 @@ pipx install pipenv
 # Clone the computer vision repository
 git clone git@github.com:ccb-hms/computervision.git
 ```
-Directly install the python dependencies into the project folder.
+Install the python dependencies into the project root:
 ```bash
-# Clone the computer vision repository
-git clone git@github.com:ccb-hms/computervision.git
-
 # Navigate into the project repository
 cd computervision
 
-# Create a hidden .venv folder
+# Create a hidden .venv folder. This is where the python packages for the project will be installed
 mkdir .venv
 
-# Install the package along with all dependencies
+# Install the computervision package along with all dependencies as defined in the Pipfile
 # Pipenv will use the .venv folder for the virtual environment
-pipenv install --editable . --python=3.10.11 --dev
+pipenv install -e . --python=3.10.11
+# Install the dev dependencies
+pipenv install --dev
 ```
-4. After installation, test the package and the new environment.
+
+To install [Detectron2](https://detectron2.readthedocs.io/en/latest/tutorials/install.html),
+make sure that you are in the computervision directory: `pwd` prints the current directory.
+Compiliation of the detectron library requires gcc & g++ version > 7. Therefore, before running the
+detectron2 installation script, a suitable gcc module should be loaded:
 ```bash
-# Activate the python environment
-pipenv shell
-# Run the tests in the ./tests
-python -m pytest
+module load gcc/9.2.0
 ```
+Then, run the detectron install script from the project root:
+```bash
+bash ./bash_scripts/install_detectron
+```
+### Test the package installation ###
+You can test the successful installation of the `computervision` package, including the detectron2 
+library by running pytest:
+```bash
+pipenv run python -m pytest
+```
+
 Upon successful installation and test run, the test session should complete without any errors.
 The output after running the tests should look like this:
 

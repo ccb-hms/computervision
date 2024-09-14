@@ -1,5 +1,4 @@
 <p float="left">
-    <img style="vertical-align: top" src="./images/HMS_DBMI_Logo.png" width="50%" />
     <img style="vertical-align: top" src="./images/train_195_boxes.png" width="40%" />
 </p>
 

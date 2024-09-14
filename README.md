@@ -97,12 +97,9 @@ associated with the typical workflow using pip, virtualenv, and the good old req
 It combines the functionalities of pip and virtualenv into one tool, 
 providing a smooth and convenient workflow for developers.
 
-```bash
-# Create a pipenv environment with all dependencies
-pipenv install -e . --dev
-# Run jupyter lab
-pipenv run jupyter lab
-```
+Follow the recommendations below for [installation on O2](./docs/O2_install.md), the HPC platform at HMS.
+For local Linux-based environments, omit the instructions for loading modules.
+
 The notebooks use an environment variable called `DATA_ROOT` to keep track of the data files.
 For use with a docker container, this variable is defined in the Dockerfile
 as `DATA_ROOT=/app/docker`. If you do not use docker, you can just set the `DATA_ROOT` variable yourself or run the
@@ -120,7 +117,7 @@ pipenv run jupyter lab
 ### Install on O2 at Harvard Medical School ###
 <h3><img align="center" width="25%" src=./images/cloud_computing_640_3.jpg></h3>
 
-O2 is the linux-based high-performance computing platform at 
+O2 is the Linux-based high-performance computing platform at 
 Harvard Medical School. The platform is managed by the Research Computing Group, part of [HMS IT](http://it.hms.harvard.edu/), and documented
 on the [O2 documentation website](https://harvardmed.atlassian.net/wiki/spaces/O2/overview?homepageId=1586790623).
 The cluster does not support Docker at this time, so we recommend creating a 

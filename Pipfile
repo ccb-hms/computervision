@@ -20,6 +20,9 @@ grad-cam = "*"
 tensorflow = "==2.15"
 python-dotenv = "*"
 computervision = {file = ".", editable = true}
+pytest = "*"
+pytest-cov = "*"
+setuptools-scm = "*"
 
 [dev-packages]
 jupyterlab = "*"

@@ -39,7 +39,7 @@ RUN pip install pipenv
 COPY setup.py ./
 COPY src/computervision/__init__.py src/computervision/__init__.py
 
-# Install dependencies
+# Install Python dependencies
 COPY Pipfile Pipfile.lock ./
 RUN --mount=source=.git,target=.git,type=bind \
     pipenv install --system --deploy --ignore-pipfile --dev

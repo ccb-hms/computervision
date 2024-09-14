@@ -1,3 +1,11 @@
 #!/bin/bash
 
-# This script activates the environmen in the parent directory.
+# This script needs to run from the project root
+# Check if we have a Pipfile
+if test -f Pipfile; then
+     echo "Pipfile found. Running Detectron2 install"
+     pipenv run python -m \
+          pip install 'git+https://github.com/facebookresearch/detectron2.git'
+else
+     echo "Pipfile not found in current directory. Skipping."
+fi

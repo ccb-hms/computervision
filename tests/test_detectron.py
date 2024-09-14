@@ -28,6 +28,7 @@ class Detectron2Config:
         cfg.merge_from_file(model_zoo.get_config_file(self.config_file))
         cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5  # set threshold for this model
         cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(self.weights_file)
+        cfg.MODEL.DEVICE = 'cpu'
         return cfg
 
 @dataclass

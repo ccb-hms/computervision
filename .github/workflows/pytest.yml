@@ -27,13 +27,13 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: install Pipenv, Pipfile
-        run: |
-          python -m pip install pipenv
-          pipenv install --dev --ignore-pipfile --python=${{ matrix.python-version }}
+      - name: install Pipenv
+        run: python -m pip install pipenv
 
       - name: install PyTorch
-        run: pipenv run python -m pip install torch torchvision torchaudio
+        run: |
+          python -m pip install torch torchvision torchaudio
+          pipenv install --dev --ignore-pipfile --python=${{ matrix.python-version }}
 
       - name: install detectron2
         run: bash ./bash_scripts/install_detectron

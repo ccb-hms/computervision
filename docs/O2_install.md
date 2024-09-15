@@ -13,9 +13,10 @@ access a list of available GPU cards and submit an interactive GPU job using the
 ```bash
 sinfo  --Format=nodehost,available,memory,statelong,gres:40 -p gpu
 ```
-Request an interactive GPU partition for a duration of three hours (change, if you need more time):
+Request an interactive GPU partition with one CPU core and 32GB of memory for three hours
+(change this accordingly):
 ```bash
-srun -n 1 --pty -t 3:00:00 -p gpu --gres=gpu:1 /bin/bash
+srun -p gpu -c 1 -t 0-3:00 --pty --mem 32G --gres=gpu:1 /bin/bash
 ```
 3. Confirm your access to the GPU by using the *nvidia-smi* command.
 ```bash
@@ -28,9 +29,9 @@ as specified [NVIDIA CUDA Toolkit Release Notes](https://docs.nvidia.com/cuda/ar
 Please note that some older GPU servers may not have updated to the required GPU driver version and can 
 fail the CUDA tests. However, this does not affect the installation process, 
 as the test will succeed on a GPU with the required driver version.
-If needed, request a specific GPU card, such as the Tesla M40, through this command:
+If needed, you can request a specific GPU card, such as the Tesla M40:
 ```bash
-srun -n 1 --pty -t 3:00:00 -p gpu --gres=gpu:teslaM40:1 /bin/bash
+srun -p gpu -c 1 -t 0-3:00 --pty --mem 32G --gres=gpu:teslaM40:1 /bin/bash
 ```
 4. Load a module for the recommended Python version. 
 You can obtain a list of available Python versions using the *module spider* command. 

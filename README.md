@@ -3,6 +3,13 @@ https://pyscaffold.org/)
 [![Python 3.10](
 https://img.shields.io/badge/python-3.10-blue.svg)](
 https://www.python.org/downloads/release/python-31012/)
+[![docker](
+https://github.com/ccb-hms/computervision/actions/workflows/docker.yml/badge.svg?branch=develop)](
+https://github.com/ccb-hms/computervision/actions/workflows/docker.yml)
+[![pytest](
+https://github.com/ccb-hms/computervision/actions/workflows/pytest.yml/badge.svg?branch=develop)](
+https://github.com/ccb-hms/computervision/actions/workflows/pytest.yml)
+
 <p float="left">
     <img style="vertical-align: top" src="./images/train_195_boxes.png" width="40%" />
 </p>

@@ -22,4 +22,4 @@ jobs:
       run: docker compose build
 
     - name: Run tests
-      run: docker compose run app python -m pytest
+      run: docker compose -f "docker-compose-cpu.yml" run app python -m pytest

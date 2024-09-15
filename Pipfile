@@ -17,7 +17,6 @@ tqdm = "*"
 albumentations = "*"
 lightning = "*"
 grad-cam = "*"
-tensorflow = "==2.15"
 python-dotenv = "*"
 computervision = {file = ".", editable = true}
 pytest = "*"

@@ -13,8 +13,8 @@ access a list of available GPU cards and submit an interactive GPU job using the
 ```bash
 sinfo  --Format=nodehost,available,memory,statelong,gres:40 -p gpu
 ```
+Request an interactive GPU partition for a duration of three hours (change, if you need more time):
 ```bash
-# Request an interactive partition (for a duration of three hours)
 srun -n 1 --pty -t 3:00:00 -p gpu --gres=gpu:1 /bin/bash
 ```
 3. Confirm your access to the GPU by using the *nvidia-smi* command.
@@ -36,21 +36,13 @@ srun -n 1 --pty -t 3:00:00 -p gpu --gres=gpu:teslaM40:1 /bin/bash
 You can obtain a list of available Python versions using the *module spider* command. 
 Load Python 3.10.11 (recommended version for the computer vision repository) as follows:
 ```bash
-# View all available Python versions:
-module spider python
-
-# View module load instructions for Python 3.10.11:
-module spider python/3.10.11
-
-# Load python 3.10 module
 module load python/3.10.11
 ````
 #### Install the Pipenv package manager tool ####
 1. Install pipenv using pipx to create a virtual environment for the dependencies specified in the Pipfile. 
 Make sure that the correct Python version (3.10.11) is in use. The command: `which python` should 
-return the correct version number.
+return the correct version number. Pipx creates an isolated python environment to run Python applications.
 ```bash
-# To install pipx in your home directory, run:
 python -m pip install -U --user pipx
 ```
 If the pipx command is not available, extend your PATH variable in the bash_profile to include the ~/.local/bin directory:
@@ -66,7 +58,6 @@ source ~/.bash_profile
 ```
 2. Install pipenv in its own environment within your home directory.
 ```bash
-# Install pipenv with pipx
 pipx install pipenv
 ```
 3. Clone the computer vision repository and install it and its dependencies into a pipenv virtual environment.
@@ -85,10 +76,11 @@ mkdir .venv
 # Install the computervision package along with all dependencies as defined in the Pipfile
 # Pipenv will use the .venv folder for the virtual environment
 pipenv install -e . --python=3.10.11
-# Install the dev dependencies
+```
+If you plan to run the Jupyter Lab server from the new environment, install the *dev* dependencies:
+```bash
 pipenv install --dev
 ```
-
 To install [Detectron2](https://detectron2.readthedocs.io/en/latest/tutorials/install.html),
 make sure that you are in the computervision directory: `pwd` prints the current directory.
 Compiliation of the detectron library requires gcc & g++ version > 7. Therefore, before running the
@@ -101,8 +93,8 @@ Then, run the detectron install script from the project root:
 bash ./bash_scripts/install_detectron
 ```
 ### Test the package installation ###
-You can test the successful installation of the `computervision` package, including the detectron2 
-library by running pytest:
+You can test the successful installation of the `computervision` package, including the Detectron2 
+library by running pytest from root of the project directory:
 ```bash
 pipenv run python -m pytest
 ```

@@ -1,4 +1,4 @@
-FROM python:3.10 AS base
+FROM python:3.12 AS base
 
 ARG DEV_computervision
 
@@ -15,8 +15,9 @@ ENV \
     NO_COLOR=true \
     PIPENV_NOSPIN=true
 
-# Port for JupyterLab server
+# Ports for jupyter and tensorboard
 EXPOSE 8888
+EXPOSE 6006
 
 RUN mkdir -p /app
 WORKDIR /app
@@ -39,7 +40,7 @@ RUN pip install pipenv
 COPY setup.py ./
 COPY src/computervision/__init__.py src/computervision/__init__.py
 
-# Install Python dependencies
+# Pipenv dependencies
 COPY Pipfile Pipfile.lock ./
 RUN --mount=source=.git,target=.git,type=bind \
     pipenv install --system --deploy --ignore-pipfile --dev
@@ -50,7 +51,7 @@ COPY /bash_scripts/* /run_scripts
 RUN chmod +x /run_scripts/*
 
 # Install Detectron2
-RUN python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
+# RUN python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
 
 # Run the jupyter server
 CMD ["/bin/bash", "/run_scripts/docker_entry"]

@@ -11,7 +11,7 @@ https://github.com/ccb-hms/computervision/actions/workflows/pytest.yml/badge.svg
 https://github.com/ccb-hms/computervision/actions/workflows/pytest.yml)
 
 <p float="left">
-    <img style="vertical-align: top" src="./images/train_195_boxes.png" width="40%" />
+    <img style="vertical-align: top" src="./images/train_248_boxes.png" width="40%" />
 </p>
 
 ## The CCB Computer Vision Code Repository #

@@ -1,7 +1,8 @@
 """
 Methods for image processing
 Andreas Werdich
-Center for Computational Biomedicine
+Core for Computational Biomedicine
+Harvard Medical School, Boston, MA, USA
 """
 
 import os
@@ -15,22 +16,87 @@ from PIL import Image
 logger = logging.getLogger(name=__name__)
 
 
-def clip_range(r, max_val):
-    return max(min(r, max_val), 0)
+def clip_range(r, min_val=0, max_val=1):
+    return max(min(r, max_val), min_val)
 
-
-def transform_box(box_padded, pad_pixels, img):
+def transform_box(box_padded, img, pad_pixels=0):
     """
     Transform bounding box from padded to original image
     """
     img_h, img_w = img.shape[:2]
     x, y, w, h = box_padded - float(pad_pixels)
-    output_box = tuple([clip_range(x, img_w),
-                        clip_range(y, img_h),
-                        clip_range(w, img_w),
-                        clip_range(h, img_h)])
+    output_box = tuple([clip_range(x, min_val=0, max_val=img_w),
+                        clip_range(y, min_val=0, max_val=img_h),
+                        clip_range(w, min_val=0, max_val=img_w),
+                        clip_range(h, min_val=0, max_val=img_h)])
     return output_box
 
+def xywh2xyxy(xywh):
+    assert isinstance(xywh, list) and len(xywh)==4, 'input must be a bounding box [x, y, width, height]'
+    return [xywh[0], xywh[1], xywh[0] + xywh[2], xywh[1] + xywh[3]]
+
+def xyxy2xywh(xyxy):
+    assert isinstance(xyxy, list) and len(xyxy)==4, 'input must be a bounding box [x_min, y_min, x_max, y_max]'
+    return [xyxy[0], xyxy[1], xyxy[2] - xyxy[0], xyxy[3] - xyxy[1]]
+
+def clipxyxy(xyxy, xlim, ylim, decimals=None):
+    assert isinstance(xyxy, list) and len(xyxy)==4, 'xyxy must be a bounding box [x_min, y_min, x_max, y_max]'
+    assert len(xlim)==len(ylim)==2, 'xlim and xlim must be lists [min, max]'
+    xyxy_clipped = [clip_range(xyxy[0], min_val=min(xlim), max_val=max(xlim)),
+                    clip_range(xyxy[1], min_val=min(ylim), max_val=max(ylim)),
+                    clip_range(xyxy[2], min_val=min(xlim), max_val=max(xlim)),
+                    clip_range(xyxy[3], min_val=min(ylim), max_val=max(ylim))]
+    if decimals is not None:
+        if decimals==0:
+            # Convert the output bounding box coordinates into integer values
+            output = [np.int64(np.floor(r)) for r in xyxy_clipped]
+        else:
+            output = [round(r, ndigits=decimals) for r in xyxy_clipped]
+    else:
+        output=xyxy_clipped
+    return output
+
+def clipxywh(xywh, xlim, ylim, decimals=None):
+    assert isinstance(xywh, list) and len(xywh)==4, 'xywh must be a bounding box [x_min, y_min, width, height]'
+    assert len(xlim)==len(ylim)==2, 'xlim and xlim must be lists [min, max]'
+    xyxy = xywh2xyxy(xywh)
+    xyxy_clipped = clipxyxy(xyxy=xyxy, xlim=xlim, ylim=ylim, decimals=decimals)
+    return xyxy2xywh(xyxy_clipped)
+
+def yolo2xywh(yolobox: list, width: int, height: int) -> list:
+    """
+    Converts a YOLO format bounding box to standard XYWH format.
+    """
+    try:
+        assert isinstance(yolobox, (list, tuple, np.ndarray)) and len(yolobox)==4
+    except:
+        raise AssertionError('yolobox is a bounding box in yolo format!')
+    else:
+        x_rel, y_rel, w_rel, h_rel = yolobox
+        xywh = [(x_rel-(w_rel/2)) * width,
+                (y_rel-(h_rel/2)) * height,
+                w_rel * width, h_rel * height]
+    return xywh
+
+def determine_bbox_format(bbox):
+    """
+    This is just a consistency check for the bounding boxes. May NOT be conclusive.
+    Parameters:
+        bbox (list or tuple): Bounding box, list of four numbers.
+    Returns:
+        str: 'xywh' if it's in COCO format, 'xyxy' if it's in Pascal VOC format, None if undetermined.
+    """
+    output = None
+    if isinstance(bbox, (list, tuple, np.ndarray)) and len(bbox) == 4:
+        x1, y1, x2, y2 = bbox
+        if all(x>=0 for x in bbox):
+            if x2 > x1 and y2 > y1:
+                # PASCAL: Here x2, y2 are max values, implying it represents bottom-right; x1, y1 as top-left
+                output = 'xyxy'
+            elif x2 > 0 and y2 > 0:
+                # COCO: Here x2, y2 are width and height, but those should be larger than zero
+                output = 'xywh'
+    return output
 
 def crop_image(image, box):
     """

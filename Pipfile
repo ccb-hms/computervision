@@ -4,31 +4,23 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-tox = "*"
-cython = "*"
-pyscaffold = "*"
+computervision = {file = ".", editable = true}
+torch = "*"
+torchvision = "*"
+torchaudio = "*"
 pandas = "*"
 pyarrow = "*"
-fastparquet = "*"
 scikit-learn = "*"
 scikit-image = "*"
 opencv-python = "*"
 tqdm = "*"
-albumentations = "*"
-lightning = "*"
-grad-cam = "*"
-python-dotenv = "*"
-computervision = {file = ".", editable = true}
-pytest = "*"
-pytest-cov = "*"
-setuptools-scm = "*"
+transformers = {git = "https://github.com/huggingface/transformers"}
 
 [dev-packages]
 jupyterlab = "*"
 ipywidgets = "*"
 matplotlib = "*"
-seaborn = "*"
 
 [requires]
-python_version = "3.10"
-python_full_version = "3.10.11"
+python_version = "3.12"
+python_full_version = "3.12.3"

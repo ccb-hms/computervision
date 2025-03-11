@@ -1,11 +1,13 @@
 """
 Tools for working with the Dentex Challenge data
 Andreas Werdich
-Center for Computational Biomedicine
+Core for Computational Biomedicine
+Harvard Medical School, Boston, MA, USA
 """
 
 import os
 import numpy as np
+import pandas as pd
 import logging
 import tarfile
 import json
@@ -108,7 +110,7 @@ class DentexData:
                 logger.error(f'Could not extract: {e}')
         return data_tar_file
 
-    def load_annotations(self, json_file):
+    def load_annotations(self, json_file) -> dict:
         try:
             with open(json_file, 'r') as f:
                 self.annotations = json.load(f)
@@ -116,3 +118,26 @@ class DentexData:
         except IOError as e:
             logger.error(f'Could not read {json_file}: {e}')
         return self.annotations
+
+    def annotations_to_df(self, json_file=None) -> pd.DataFrame:
+        if json_file is not None:
+            self.annotations = self.load_annotations(json_file)
+        if self.annotations is not None:
+            annotations_dict = {k: pd.DataFrame(v) for k, v in self.annotations.items()}
+            images = annotations_dict.get('images'). \
+                rename(columns={'id': 'image_id'})
+            output = annotations_dict.get('annotations')
+            output = output.merge(images, on='image_id', how='left')
+            # Get a list of category tables in the annotation dictionary
+            category_names = sorted([k for k in annotations_dict.keys() if 'cat' in k])
+            category_column_names = {category: f'category_id_{c + 1}' \
+                                     for c, category in enumerate(category_names)}
+            for category, column_name in category_column_names.items():
+                category_df = annotations_dict.get(category). \
+                    rename(columns={'id': column_name, 'name': f'{column_name}_name'}). \
+                    drop('supercategory', axis=1)
+                output = output.merge(category_df, on=column_name, how='left')
+        else:
+            logger.error('No annotations loaded')
+            output = None
+        return output

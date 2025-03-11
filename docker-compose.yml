@@ -20,12 +20,8 @@ services:
     environment:
     - NVIDIA_VISIBLE_DEVICES=all
     - HOME=/app
-    - DATA_ROOT=/app/data
     ports:
       - "8888:8888"
     volumes:
       - .:/app
-      - appdata:/app/data
-volumes:
-  appdata:
-    external: false
+      - ./data:/app/data

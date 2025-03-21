@@ -3,13 +3,13 @@ services:
   app:
     image: computervision:latest
     container_name: computervision
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
     build: 
       context: .
       network: host
@@ -24,4 +24,8 @@ services:
       - "8888:8888"
     volumes:
       - .:/app
-      - ./data:/app/data
+      - app_data:/app/data
+
+volumes:
+  app_data:
+    external: false

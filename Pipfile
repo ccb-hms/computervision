@@ -4,7 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-computervision = {file = ".", editable = true}
 torch = "*"
 torchvision = "*"
 torchaudio = "*"
@@ -15,6 +14,7 @@ scikit-image = "*"
 opencv-python = "*"
 tqdm = "*"
 transformers = {git = "https://github.com/huggingface/transformers"}
+computervision = {file = ".", editable = true}
 
 [dev-packages]
 jupyterlab = "*"

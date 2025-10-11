@@ -34,19 +34,28 @@ class AugmentationTransform:
                 alb.Sharpen(p=0.5),
                 alb.CLAHE(p=0.5)]
 
-        elif name == 'train_14_23':
-            # Transformation for training on quadrants 14/23
+        elif name == 'train_dentex':
             crop_transforms = [
-                alb.RandomCropFromBorders(crop_left=0.3,
-                                          crop_right=0.3,
-                                          crop_top=0.5,
-                                          crop_bottom=0.5, p=1.0),
+                alb.RandomCropFromBorders(crop_left=0.25,
+                                          crop_right=0.25,
+                                          p=1.0),
                 alb.CenterCrop(height=self.im_height,
                                width=self.im_width,
                                pad_if_needed=True, p=1.0)]
 
             image_transforms = [
-                alb.Affine(scale=(0.8, 1.2), rotate=1, p=0.5),
+                alb.Affine(translate_percent=(-0.01, 0.01),
+                           rotate=(-15, 15),
+                           interpolation=cv2.INTER_LINEAR,
+                           border_mode=cv2.BORDER_CONSTANT,
+                           keep_ratio=True,
+                           rotate_method='largest_box',
+                           balanced_scale=True,
+                           p=0.5),
+                alb.CoarseDropout(num_holes_range=(1, 32),
+                                  hole_height_range=(4, 25),
+                                  hole_width_range=(4, 25),
+                                  p=0.5),
                 alb.RandomBrightnessContrast(p=0.5),
                 alb.Sharpen(p=0.5),
                 alb.CLAHE(p=0.5)]
@@ -56,12 +65,24 @@ class AugmentationTransform:
             image_transforms = [alb.AutoContrast(p=1), alb.CLAHE(p=1)]
 
         elif name == 'test_set':
-            # Transformations for creating the test/validation sets
-            crop_transforms = [alb.RandomCropFromBorders(crop_left=0.3,
-                                                         crop_right=0.3,
-                                                         crop_top=0.5,
-                                                         crop_bottom=0.5, p=1.0)]
-            image_transforms = [alb.RandomBrightnessContrast(p=1.0)]
+            crop_transforms = [
+                alb.RandomCropFromBorders(crop_left=0.25,
+                                          crop_right=0.25,
+                                          p=1.0),
+                alb.CenterCrop(height=self.im_height,
+                               width=self.im_width,
+                               pad_if_needed=True, p=1.0)]
+
+            image_transforms = [
+                alb.Affine(translate_percent=(-0.01, 0.01),
+                           rotate=(-15, 15),
+                           interpolation=cv2.INTER_LINEAR,
+                           border_mode=cv2.BORDER_CONSTANT,
+                           keep_ratio=True,
+                           rotate_method='largest_box',
+                           balanced_scale=True,
+                           p=0.5),
+                alb.RandomBrightnessContrast(p=1.0)]
 
         else:
             logger.error('Transformation "{}" not implemented'.format(name))
@@ -114,7 +135,7 @@ class DETRansform:
             self.bbox_format = {'format': 'coco',
                                 'label_fields': ['quadrants', 'positions'],
                                 'clip': True,
-                                'min_area': 1000}
+                                'min_area': 10000}
 
     def transform(self, image, bboxes: list, label_fields: list):
 

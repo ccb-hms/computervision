@@ -35,6 +35,13 @@ class AugmentationTransform:
                 alb.CLAHE(p=0.5)]
 
         elif name == 'train_dentex':
+
+            # Maybe:
+            #alb.CoarseDropout(num_holes_range=(1, 32),
+            #                  hole_height_range=(4, 32),
+            #                  hole_width_range=(4, 32),
+            #                  p=0.5)
+
             crop_transforms = [
                 alb.RandomCropFromBorders(crop_left=0.25,
                                           crop_right=0.25,
@@ -52,10 +59,6 @@ class AugmentationTransform:
                            rotate_method='largest_box',
                            balanced_scale=True,
                            p=0.5),
-                alb.CoarseDropout(num_holes_range=(1, 32),
-                                  hole_height_range=(4, 25),
-                                  hole_width_range=(4, 25),
-                                  p=0.5),
                 alb.RandomBrightnessContrast(p=0.5),
                 alb.Sharpen(p=0.5),
                 alb.CLAHE(p=0.5)]
@@ -135,7 +138,8 @@ class DETRansform:
             self.bbox_format = {'format': 'coco',
                                 'label_fields': ['quadrants', 'positions'],
                                 'clip': True,
-                                'min_area': 10000}
+                                'filter_invalid_bboxes': True,
+                                'min_area': 5000}
 
     def transform(self, image, bboxes: list, label_fields: list):
 

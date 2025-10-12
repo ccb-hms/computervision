@@ -26,7 +26,7 @@ from computervision.mapeval import MAPEvaluator
 #%% Data files and directories
 model_version = 2
 date_str = datetime.date.today().strftime('%y%m%d')
-model_name = f'rtdetr_{date_str}_{str(model_version).zfill(2)}'
+model_name = f'rtdetr_dtx_{date_str}_{str(model_version).zfill(2)}'
 print(f'Model name: {model_name}')
 data_dir = os.environ.get('DATA')
 if data_dir is None:

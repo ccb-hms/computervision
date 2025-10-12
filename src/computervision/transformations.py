@@ -59,6 +59,10 @@ class AugmentationTransform:
                            rotate_method='largest_box',
                            balanced_scale=True,
                            p=0.5),
+                alb.CoarseDropout(num_holes_range=(1, 50),
+                                  hole_height_range=(4, 32),
+                                  hole_width_range=(4, 32),
+                                  p=0.5),
                 alb.RandomBrightnessContrast(p=0.5),
                 alb.Sharpen(p=0.5),
                 alb.CLAHE(p=0.5)]

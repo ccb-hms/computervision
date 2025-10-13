@@ -18,7 +18,7 @@ class DetectionMetrics:
                              true_bboxes: list,
                              pred_labels: list,
                              pred_bboxes: list,
-                             iou_threshold: float = 0.5) -> tuple:
+                             iou_threshold: float = 0.5) -> pd.DataFrame:
 
         # Make sure that the true and pred labels are lists
         assert all([isinstance(true_labels, list), isinstance(pred_labels, list)])
@@ -34,6 +34,7 @@ class DetectionMetrics:
 
         # Missed predictions (FN)
         missed = sorted(list(set(true_labels).difference(pred_labels)))
+
         # Classify predictions (TP:1, FP:0)
         iou_list = []
         prediction_list = []
@@ -66,7 +67,7 @@ class DetectionMetrics:
         output_df.loc[(pred_df.duplicated(subset=['pred_label', 'TP'])) & (pred_df['TP'] == 1), 'TP'] = 0
         output_df.loc[(pred_df.duplicated(subset=['pred_label', 'TP'])) & (pred_df['TP'] == 1), 'duplicate_TP'] = True
 
-        return missed, output_df
+        return output_df
 
 
     @staticmethod

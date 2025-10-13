@@ -96,24 +96,27 @@ def xyxy2xywh(xyxy):
     assert isinstance(xyxy, list) and len(xyxy)==4, 'input must be a bounding box [x_min, y_min, x_max, y_max]'
     return [xyxy[0], xyxy[1], xyxy[2] - xyxy[0], xyxy[3] - xyxy[1]]
 
-def clipxyxy(xyxy, xlim, ylim, decimals=None):
+def clipxyxy(xyxy, xlim, ylim, decimals=0):
     assert isinstance(xyxy, list) and len(xyxy)==4, 'xyxy must be a bounding box [x_min, y_min, x_max, y_max]'
     assert len(xlim)==len(ylim)==2, 'xlim and xlim must be lists [min, max]'
     xyxy_clipped = [clip_range(xyxy[0], min_val=min(xlim), max_val=max(xlim)),
                     clip_range(xyxy[1], min_val=min(ylim), max_val=max(ylim)),
                     clip_range(xyxy[2], min_val=min(xlim), max_val=max(xlim)),
                     clip_range(xyxy[3], min_val=min(ylim), max_val=max(ylim))]
-    if decimals is not None:
-        if decimals==0:
-            # Convert the output bounding box coordinates into integer values
-            output = [np.int64(np.floor(r)) for r in xyxy_clipped]
-        else:
-            output = [round(r, ndigits=decimals) for r in xyxy_clipped]
+
+    if decimals is None:
+        output = xyxy_clipped
+
+    elif decimals==0:
+        # Convert the output bounding box coordinates into integer values
+        output = [np.int64(np.floor(r)) for r in xyxy_clipped]
+
     else:
-        output=xyxy_clipped
+        output = [round(r, ndigits=decimals) for r in xyxy_clipped]
+
     return output
 
-def clipxywh(xywh, xlim, ylim, decimals=None):
+def clipxywh(xywh, xlim, ylim, decimals=0):
     """
     Clips a bounding box defined in [x_min, y_min, width, height] format to specified limits.
 

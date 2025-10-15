@@ -24,9 +24,9 @@ from computervision.transformations import AugmentationTransform
 from computervision.mapeval import MAPEvaluator
 
 #%% Data files and directories
-model_version = 1
+model_version = 7
 date_str = datetime.date.today().strftime('%y%m%d')
-model_name = f'rtdetr_{date_str}_{str(model_version).zfill(2)}'
+model_name = f'rtdetr_dtx_{date_str}_{str(model_version).zfill(2)}'
 print(f'Model name: {model_name}')
 data_dir = os.environ.get('DATA')
 if data_dir is None:
@@ -35,12 +35,13 @@ model_dir = os.path.join(data_dir, 'model')
 model_name_dir = os.path.join(model_dir, model_name)
 Path(model_name_dir).mkdir(parents=True, exist_ok=True)
 
-train_image_dir = os.path.join(data_dir, 'dentex_detection_250928')
-train_annotation_file_name = 'train_quadrant_enumeration_dset.parquet'
+dataset_name = 'dataset_object_dentex_251011'
+train_image_dir = os.path.join(data_dir, dataset_name)
+train_annotation_file_name = f'{dataset_name}_dset.parquet'
 train_annotation_file = os.path.join(train_image_dir, train_annotation_file_name)
 
 val_image_dir = os.path.join(train_image_dir,'test')
-val_annotation_file_name = 'train_quadrant_enumeration_test_set.parquet'
+val_annotation_file_name = f'{dataset_name}_test.parquet'
 val_annotation_file = os.path.join(val_image_dir, val_annotation_file_name)
 
 # Column names for the annotation files
@@ -51,15 +52,14 @@ dset_col = 'dset'
 
 #%% Model and training parameters
 # Training and model parameters
-device_number = 0
-device, device_str = get_gpu_info(device_number=device_number)
+device, device_str = get_gpu_info()
 
 # Image transformations for training and validation
 im_width, im_height = 640, 640
 # Augmentations
-train_quadrants = [14, 23]
+train_quadrants = [12, 34, 14, 23]
 val_quadrants = [14, 23]
-train_transform_name = 'train_14_23'
+train_transform_name = 'train_dentex'
 val_transform_name = 'val'
 aug = AugmentationTransform(im_width=im_width, im_height=im_height)
 train_transforms = aug.get_transforms(name=train_transform_name)
@@ -67,7 +67,7 @@ val_transforms = aug.get_transforms(name=val_transform_name)
 
 # Important information about the model that we want to save
 model_info = {'model_version': model_version,
-              'device_number': device_number,
+              'device': device_str,
               'project_version': computervision.__version__,
               'model_name': model_name,
               'train_image_dir': train_image_dir,
@@ -80,14 +80,15 @@ model_info = {'model_version': model_version,
               'val_quadrants': val_quadrants,
               'train_transform_name': train_transform_name,
               'val_transform_name': val_transform_name,
-              'val_score_threshold': 0.02}
+              'val_score_threshold': 0.05,
+              'comment': 'train with dropout'}
 
 # Specific arguments for the Trainer. 48
 # See: https://huggingface.co/docs/transformers/en/main_classes/trainer#trainer
 training_args = {'output_dir': model_name_dir,
-                 'num_train_epochs': 300,
+                 'num_train_epochs': 1200,
                  'max_grad_norm': 0.1,
-                 'learning_rate': 5e-5,
+                 'learning_rate': 1e-7,
                  'warmup_steps': 300,
                  'per_device_train_batch_size': 48,
                  'dataloader_num_workers': 8,
@@ -238,4 +239,3 @@ trainer = Trainer(model=model,
                   compute_metrics=eval_compute_metrics_fn)
 
 trainer.train()
-

@@ -13,34 +13,6 @@ from computervision.transformations import DETRansform
 
 logger = logging.getLogger(__name__)
 
-# GPU checks
-def get_gpu_info(device_number: int = None):
-
-    if device_number is None:
-        is_cuda = torch.cuda.is_available()
-        print(f'CUDA available: {is_cuda}')
-        print(f'Number of GPUs found:  {torch.cuda.device_count()}')
-        if is_cuda:
-            print(f'Current device ID: {torch.cuda.current_device()}')
-            print(f'GPU device name:   {torch.cuda.get_device_name(0)}')
-            print(f'PyTorch version:   {torch.__version__}')
-            print(f'CUDA version:      {torch.version.cuda}')
-            print(f'CUDNN version:     {torch.backends.cudnn.version()}')
-            device_str = 'cuda:0'
-            torch.cuda.empty_cache()
-        else:
-            device_str = 'cpu'
-    else:
-        device_str = f'cuda:{device_number}'
-
-    info_msg = f'Device for model training/inference: {device_str}'
-    print(info_msg)
-    device = torch.device(device_str)
-    logger.info(info_msg)
-
-    return device, device_str
-
-
 class DETRdataset(Dataset):
     def __init__(self,
                  data: pd.DataFrame,

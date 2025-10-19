@@ -7,11 +7,15 @@ from torchvision import ops
 from computervision.imageproc import xywh2xyxy, clipxywh
 
 class DetectionMetrics:
-    def __init__(self, im_width: int, im_height: int, bbox_format: str = 'xywh'):
-        self.x_lim = (0, im_width)
-        self.y_lim = (0, im_height)
+    def __init__(self, im_width: int = None, im_height: int = None, bbox_format: str = 'xywh'):
+        if im_width is not None and im_height is not None:
+            self.x_lim = (0, im_width)
+            self.y_lim = (0, im_height)
+        else:
+            self.x_lim = None
+            self.y_lim = None
         self.bbox_format = bbox_format
-        assert bbox_format in ['xyxy', 'xywh'], 'bbox_format should be either "xyxy" or "xywh"'
+        assert bbox_format == 'xywh', 'bbox_format should be in COCO "xywh" format'
 
     def classify_predictions(self,
                              true_labels: list,
@@ -28,11 +32,15 @@ class DetectionMetrics:
         assert len(true_labels) == len(true_bboxes), 'labels and bboxes (true) must be the same length'
         assert len(pred_labels) == len(pred_bboxes), 'labels and bboxes (pred) must be the same length'
 
-        # Clip bounding boxes to image dimensions
-        true_bboxes = [clipxywh(bbox, xlim=self.x_lim, ylim=self.y_lim, decimals=0) for bbox in true_bboxes]
-        pred_bboxes = [clipxywh(bbox, xlim=self.x_lim, ylim=self.y_lim, decimals=0) for bbox in pred_bboxes]
+        # Clip bounding boxes to image dimensions if image sizes are provided
+        if self.x_lim is not None and self.y_lim is not None:
+            true_bboxes = [clipxywh(bbox, xlim=self.x_lim, ylim=self.y_lim, decimals=0) for bbox in true_bboxes]
+            pred_bboxes = [clipxywh(bbox, xlim=self.x_lim, ylim=self.y_lim, decimals=0) for bbox in pred_bboxes]
+        else:
+            true_bboxes = [list(np.int64(box)) for box in true_bboxes]
+            pred_bboxes = [list(np.int64(box)) for box in pred_bboxes]
 
-        # Missed predictions (FN)
+        # Total number of predictions that were missed
         missed = sorted(list(set(true_labels).difference(pred_labels)))
 
         # Classify predictions (TP:1, FP:0)
@@ -41,6 +49,8 @@ class DetectionMetrics:
         for p, p_label in enumerate(pred_labels):
             p_bbox = pred_bboxes[p]
             p_prediction = 0  # FP
+            # Check if the predicted label is in the ground truth labels
+            # If a prediction does not have a ground truth label, the iou is NaN
             p_iou = np.nan
             pt_iou_list = []
             for t, t_label in enumerate(true_labels):
@@ -59,7 +69,7 @@ class DetectionMetrics:
                                 'TP': prediction_list,
                                 'IoU': iou_list})
 
-        pred_df = pred_df.assign(FN=len(missed),
+        pred_df = pred_df.assign(n_missed=len(missed),
                                  duplicate_TP=False)
 
         output_df = pred_df.copy()

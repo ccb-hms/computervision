@@ -9,8 +9,8 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class AugmentationTransform:
-    im_width: int
-    im_height: int
+    im_width: int = None
+    im_height: int = None
 
     def get_transforms(self, name: str) -> list:
 
@@ -36,11 +36,8 @@ class AugmentationTransform:
 
         elif name == 'train_dentex':
 
-            # Maybe:
-            #alb.CoarseDropout(num_holes_range=(1, 32),
-            #                  hole_height_range=(4, 32),
-            #                  hole_width_range=(4, 32),
-            #                  p=0.5)
+            assert self.im_width is not None, 'im_width must be specified for training'
+            assert self.im_height is not None, 'im_height must be specified for training'
 
             crop_transforms = [
                 alb.RandomCropFromBorders(crop_left=0.25,
@@ -72,6 +69,12 @@ class AugmentationTransform:
             image_transforms = [alb.AutoContrast(p=1), alb.CLAHE(p=1)]
 
         elif name == 'test_set':
+
+            # Augmentations for creating a test set from the Dentex dataset
+
+            assert self.im_width is not None, 'im_width must be specified for creating test augmentations'
+            assert self.im_height is not None, 'im_height must be specified for creating test augmentations'
+
             crop_transforms = [
                 alb.RandomCropFromBorders(crop_left=0.25,
                                           crop_right=0.25,

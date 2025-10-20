@@ -105,37 +105,45 @@ class DetectionMetrics:
                 sort_values(by='score', ascending=False). \
                 reset_index(drop=True)
 
-            # Calculate precision and recall for each row
-            correct = classifications_label['TP'].tolist()
+            if n_labels > 0:
 
-            # precision = true positives / all detections
-            precision = [sum(correct[:i + 1]) / (i + 1) for i in range(len(correct))]
+                # Calculate precision and recall for each row
+                correct = classifications_label['TP'].tolist()
 
-            # recall = true positives / samples with this label in ground truth data
-            recall = [sum(correct[:i + 1]) / n_labels for i in range(len(correct))]
+                # precision = true positives / all detections
+                precision = [sum(correct[:i + 1]) / (i + 1) for i in range(len(correct))]
 
-            # Add precision and recall to the data frame for this label
-            classifications_label = classifications_label. \
-                assign(precision=precision, recall=recall)
+                # recall = true positives / samples with this label in ground truth data
+                recall = [sum(correct[:i + 1]) / n_labels for i in range(len(correct))]
 
-            # Calculate precision and recall independent from the bounding box
-            # We count every prediction that is in the image as positive
-            # Detections that were not in the image did not get an iou value (FP)
+                # Calculate precision and recall independent from the bounding box
+                # We count every prediction that is in the image as positive
+                # Detections that were not in the image did not get an iou value (FP)
 
-            # TP + FP
-            n_detections = len(classifications_label)
-            # TP: all detections for that class with a ground truth label, so IoU >= 0
-            n_detections_with_iou = len(classifications_label.loc[~classifications_label['IoU'].isnull()])
-            # We can add a precision and recall value that is just for this class, indepdendent from the bounding box
-            precision_label = n_detections_with_iou / n_detections
-            recall_label = n_detections_with_iou / n_labels
+                # TP + FP
+                n_detections = len(classifications_label)
+                # TP: all detections for that class with a ground truth label, so IoU >= 0
+                n_detections_with_iou = len(classifications_label.loc[~classifications_label['IoU'].isnull()])
+                # We can add a precision and recall value that is just for this class, independent from the bounding box
+                precision_label = n_detections_with_iou / n_detections
+                recall_label = n_detections_with_iou / n_labels
 
-            # Calculate the AUC
-            auc = metrics.auc(x=recall, y=precision)
+                # Calculate the AUC
+                auc = metrics.auc(x=recall, y=precision)
+
+            else:
+
+                precision = np.nan
+                recall = np.nan
+                precision_label = np.nan
+                recall_label = np.nan
+                auc = np.nan
 
             # Add the class-level precision/recall values to the data frame
             classifications_label = classifications_label. \
-                assign(precision_label=precision_label,
+                assign(precision=precision,
+                       recall=recall,
+                       precision_label=precision_label,
                        recall_label=recall_label,
                        auc=auc)
 

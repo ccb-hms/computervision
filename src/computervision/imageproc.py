@@ -18,7 +18,15 @@ from matplotlib.patches import Rectangle
 
 logger = logging.getLogger(name=__name__)
 
-def plot_boxes(image, box_list, ax, label_list=None, color=None, cmap='grey', offset_xy=(0, 0)):
+def plot_boxes(image,
+               box_list,
+               ax,
+               label_list=None,
+               color=None,
+               linewidth=1.5,
+               fontsize=8,
+               cmap='grey',
+               offset_xy=(0, 0)):
     """
     Plots bounding boxes on an image using the provided axis and optionally adds labels for each box.
     It allows you to visualize bounding boxes in different colors and optionally with specific labels.
@@ -56,13 +64,13 @@ def plot_boxes(image, box_list, ax, label_list=None, color=None, cmap='grey', of
         rect = Rectangle(xy=(box[0], box[1]),
                          width=box[2],
                          height=box[3],
-                         linewidth=1.5,
+                         linewidth=linewidth,
                          edgecolor=color_list[b],
                          facecolor='none',
                          alpha=0.7)
         ax.add_patch(rect)
         if label_list is not None:
-            ax.text(x=box[0]+offset[0], y=box[1]+offset[1], s=label_list[b], color=color_list[b], fontsize=8)
+            ax.text(x=box[0]+offset[0], y=box[1]+offset[1], s=label_list[b], color=color_list[b], fontsize=fontsize)
     return ax
 
 

@@ -4,10 +4,26 @@ import numpy as np
 import pandas as pd
 import torch
 from torchvision import ops
+from sklearn import metrics
 from computervision.imageproc import xywh2xyxy, clipxywh
 
 class DetectionMetrics:
-    def __init__(self, im_width: int = None, im_height: int = None, bbox_format: str = 'xywh'):
+    def __init__(self,
+                 true_df: pd.DataFrame,
+                 pred_df: pd.DataFrame,
+                 file_col: str,
+                 label_col: str,
+                 bbox_col: str,
+                 score_col: str,
+                 im_width: int = None,
+                 im_height: int = None,
+                 bbox_format: str = 'xywh'):
+        self.true_df = true_df
+        self.pred_df = pred_df
+        self.file_col = file_col
+        self.label_col = label_col
+        self.bbox_col = bbox_col
+        self.score_col = score_col
         if im_width is not None and im_height is not None:
             self.x_lim = (0, im_width)
             self.y_lim = (0, im_height)
@@ -16,6 +32,118 @@ class DetectionMetrics:
             self.y_lim = None
         self.bbox_format = bbox_format
         assert bbox_format == 'xywh', 'bbox_format should be in COCO "xywh" format'
+
+    def classify_predictions_df(self, iou_threshold=0.5):
+        pred_df = self.pred_df.loc[~self.pred_df[self.label_col].isnull()]
+        file_list = sorted(list(set(self.true_df[self.file_col].tolist()). \
+                                intersection(pred_df[self.file_col].tolist())))
+        classifications_df_list = []
+        missed_df_list = []
+        for f, file in enumerate(file_list):
+            true_bboxes = self.true_df.loc[self.true_df[self.file_col] == file, self.bbox_col].tolist()
+            pred_bboxes = pred_df.loc[pred_df[self.file_col] == file, self.bbox_col].tolist()
+            true_bboxes = [list(np.int64(box)) for box in true_bboxes]
+            pred_bboxes = [list(np.int64(box)) for box in pred_bboxes]
+            true_labels = self.true_df.loc[self.true_df[self.file_col] == file, self.label_col].tolist()
+            pred_labels = pred_df.loc[pred_df[self.file_col] == file, self.label_col].tolist()
+            pred_scores = pred_df.loc[pred_df[self.file_col] == file, self.score_col].tolist()
+
+            pred_cl = self.\
+                classify_predictions(true_labels=true_labels,
+                                     true_bboxes=true_bboxes,
+                                     pred_labels=pred_labels,
+                                     pred_bboxes=pred_bboxes,
+                                     iou_threshold=iou_threshold). \
+                rename(columns={'pred_label': self.label_col})
+
+            pred_cl.insert(loc=0, column=self.file_col, value=file)
+            pred_cl.insert(loc=1, column='iou_threshold', value=iou_threshold)
+            pred_cl.insert(loc=2, column=self.score_col, value=pred_scores)
+            pred_cl.insert(loc=3, column=self.bbox_col, value=pred_bboxes)
+
+            classifications_df_list.append(pred_cl)
+
+            # False negatives: Labels in the ground truth data that were not detected
+            missed_label_list = sorted(list(set(true_labels).difference(pred_labels)))
+
+            if len(missed_label_list) > 0:
+                missed_cl = pd.DataFrame({self.label_col: missed_label_list})
+                missed_cl.insert(loc=0, column=self.file_col, value=file)
+                missed_df_list.append(missed_cl)
+
+        if len(classifications_df_list) > 0:
+            classifications = pd.concat(classifications_df_list, axis=0, ignore_index=True)
+            classifications = classifications. \
+                sort_values(by=[self.label_col, self.score_col], ascending=True). \
+                reset_index(drop=True)
+        else:
+            classifications = None
+
+        if len(missed_df_list) > 0:
+            missed = pd.concat(missed_df_list, axis=0, ignore_index=True)
+            missed = missed. \
+                sort_values(by=self.label_col, ascending=True). \
+                reset_index(drop=True)
+        else:
+            missed = None
+
+        return classifications, missed
+
+    def ap_from_classifications(self, classifications):
+        """ Calculate Precision - Recall curves and AP for each label """
+
+        pr_df_list = []
+        label_list = sorted(list(classifications[self.label_col].unique()))
+
+        for label in label_list:
+            # Total number of positives in the data set (TP + FN)
+            n_labels = len(self.true_df.loc[self.true_df[self.label_col] == label])
+
+            # Predictions for this class sorted by score in descending order
+            classifications_label = classifications. \
+                loc[classifications[self.label_col] == label]. \
+                sort_values(by='score', ascending=False). \
+                reset_index(drop=True)
+
+            # Calculate precision and recall for each row
+            correct = classifications_label['TP'].tolist()
+
+            # precision = true positives / all detections
+            precision = [sum(correct[:i + 1]) / (i + 1) for i in range(len(correct))]
+
+            # recall = true positives / samples with this label in ground truth data
+            recall = [sum(correct[:i + 1]) / n_labels for i in range(len(correct))]
+
+            # Add precision and recall to the data frame for this label
+            classifications_label = classifications_label. \
+                assign(precision=precision, recall=recall)
+
+            # Calculate precision and recall independent from the bounding box
+            # We count every prediction that is in the image as positive
+            # Detections that were not in the image did not get an iou value (FP)
+
+            # TP + FP
+            n_detections = len(classifications_label)
+            # TP: all detections for that class with a ground truth label, so IoU >= 0
+            n_detections_with_iou = len(classifications_label.loc[~classifications_label['IoU'].isnull()])
+            # We can add a precision and recall value that is just for this class, indepdendent from the bounding box
+            precision_label = n_detections_with_iou / n_detections
+            recall_label = n_detections_with_iou / n_labels
+
+            # Calculate the AUC
+            auc = metrics.auc(x=recall, y=precision)
+
+            # Add the class-level precision/recall values to the data frame
+            classifications_label = classifications_label. \
+                assign(precision_label=precision_label,
+                       recall_label=recall_label,
+                       auc=auc)
+
+            pr_df_list.append(classifications_label)
+
+        pr_df = pd.concat(pr_df_list, axis=0, ignore_index=True)
+
+        return pr_df
 
     def classify_predictions(self,
                              true_labels: list,

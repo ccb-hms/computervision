@@ -1,0 +1,30 @@
+services:
+  app:
+    image: computervision:0.0.2
+    container_name: computervision
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: 1
+            capabilities: [gpu]
+    build: 
+      context: .
+      network: host
+      dockerfile: Dockerfile
+      args:
+        - DEV_computervision=1
+    ipc: host
+    env_file:
+      - ./.env
+    ports:
+      - "8888:8888"
+      - "6006:6006"
+    volumes:
+      - .:/app
+      - app_data:/app/data
+      - /home/andreas/data/data_model:/app/data_model
+volumes:
+  app_data:
+    external: false

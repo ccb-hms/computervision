@@ -215,7 +215,7 @@ def crop_image(image, box):
         crop_img: (np.ndarray) cropped image
     """
     x, y, w, h = [int(np.round(c)) for c in box]
-    return image[y:h, x:w, :]
+    return image[y:y+h, x:x+w, :]
 
 def is_image(image_file_path):
     """ Use the PIL package to check if file is an image """

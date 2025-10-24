@@ -5,13 +5,32 @@ import os
 import numpy as np
 import pandas as pd
 import torch
+import cv2
 import logging
 from torch.utils.data import Dataset
 import albumentations as alb
+from albumentations.augmentations.geometric.resize import LongestMaxSize
+from albumentations.augmentations.geometric.transforms import PadIfNeeded
 from computervision.imageproc import ImageData, is_image, clipxywh
 from computervision.transformations import DETRansform
 
 logger = logging.getLogger(__name__)
+
+def load_and_process_image(image_file_path, max_image_size=550):
+    """
+    Image preprocessing
+    """
+    # For the albumentations transformation, max_image_size needs to be of type 'int'
+    if not isinstance(max_image_size, int):
+        max_image_size = int(max_image_size)
+    transform = alb.Compose([LongestMaxSize(max_size=max_image_size),
+                             PadIfNeeded(min_height=max_image_size,
+                                         min_width=max_image_size,
+                                         border_mode=cv2.BORDER_CONSTANT,
+                                         value=0)])
+    im_raw = ImageData().load_image(image_file_path)
+    im_output = transform(image=im_raw)['image']
+    return im_output
 
 class DETRdataset(Dataset):
     def __init__(self,

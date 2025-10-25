@@ -4,33 +4,66 @@
 import os
 import numpy as np
 import pandas as pd
-import torch
-import cv2
 import logging
+import torch
 from torch.utils.data import Dataset
 import albumentations as alb
-from albumentations.augmentations.geometric.resize import LongestMaxSize
-from albumentations.augmentations.geometric.transforms import PadIfNeeded
 from computervision.imageproc import ImageData, is_image, clipxywh
-from computervision.transformations import DETRansform
+from computervision.transformations import AugmentationTransform, DETRansform
 
 logger = logging.getLogger(__name__)
 
-def load_and_process_image(image_file_path, max_image_size=550):
-    """
-    Image preprocessing
-    """
-    # For the albumentations transformation, max_image_size needs to be of type 'int'
-    if not isinstance(max_image_size, int):
-        max_image_size = int(max_image_size)
-    transform = alb.Compose([LongestMaxSize(max_size=max_image_size),
-                             PadIfNeeded(min_height=max_image_size,
-                                         min_width=max_image_size,
-                                         border_mode=cv2.BORDER_CONSTANT,
-                                         value=0)])
-    im_raw = ImageData().load_image(image_file_path)
-    im_output = transform(image=im_raw)['image']
-    return im_output
+
+class DatasetFromDF(Dataset):
+    def __init__(self,
+                 data,
+                 image_dir,
+                 file_name_col,
+                 label_id_col,
+                 max_image_size,
+                 transform=None,
+                 validate=False):
+
+        self.df = data
+        self.image_dir = image_dir
+        self.file_name_col = file_name_col
+        self.label_id_col = label_id_col
+        self.max_image_size = max_image_size
+        self.transform = transform
+        self.validate = validate
+
+        if self.validate:
+            file_list = [os.path.join(image_dir, file) for file in data[file_name_col].unique()]
+            checked = np.sum([is_image(file) for file in file_list])
+            assert len(file_list) == checked, f'Error: Could not open all images in data'
+
+    def __len__(self):
+        return self.df.shape[0]
+
+    def load_and_process_image(self, file, max_image_size):
+        file = os.path.join(self.image_dir, file)
+        image = ImageData().load_image(file)
+        transforms = AugmentationTransform(max_size=max_image_size). \
+            get_transforms(name='resize_and_pad')
+        TF = alb.Compose(transforms)
+        return TF(image=image)['image']
+
+    def __getitem__(self, idx):
+        idx = idx % self.__len__()
+        df_idx = self.df.iloc[idx]
+        file, label = df_idx[self.file_name_col], df_idx[self.label_id_col]
+        assert isinstance(label, np.int64), f'Label must be type np.int64.'
+        # Load the image, then rescale and pad it to the maximum size
+        img = self.load_and_process_image(file=file, max_image_size=self.max_image_size)
+        if self.transform:
+            img = self.transform(image=img)['image']
+        img_tensor = torch.from_numpy(img).permute(2, 0, 1)
+        # For grayscale images, we need to add a color dimension.
+        # img_tensor = torch.unsqueeze(img_tensor, dim=0)
+        # img_tensor = img_tensor.permute(2, 0, 1)
+        label_tensor = torch.from_numpy(np.array(label))
+        output = tuple([img_tensor, label_tensor])
+        return output
 
 class DETRdataset(Dataset):
     def __init__(self,

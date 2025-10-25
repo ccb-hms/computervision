@@ -2,6 +2,9 @@
 https://img.shields.io/badge/python-3.12-blue.svg)](
 https://www.python.org/downloads/release/python-31210/)
 
+[![pytest](
+https://github.com/ccb-hms/computervision/actions/workflows/pytest.yml/badge.svg)](https://github.com/ccb-hms/computervision/actions/workflows/pytest.yml)
+
 <p float="left">
     <img style="vertical-align: top" src="./images/train_248_boxes.png" width="40%" />
 </p>

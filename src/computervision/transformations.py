@@ -11,10 +11,12 @@ logger = logging.getLogger(__name__)
 class AugmentationTransform:
     im_width: int = None
     im_height: int = None
+    max_size: int = None
 
     def get_transforms(self, name: str) -> list:
 
         if name == 'train_roboflow':
+
             crop_transforms = [alb.NoOp()]
 
             image_transforms = [
@@ -34,8 +36,9 @@ class AugmentationTransform:
                 alb.Sharpen(p=0.5),
                 alb.CLAHE(p=0.5)]
 
-        elif name == 'train_dentex':
+            transforms = crop_transforms + image_transforms
 
+        elif name == 'train_dentex':
             assert self.im_width is not None, 'im_width must be specified for training'
             assert self.im_height is not None, 'im_height must be specified for training'
 
@@ -64,14 +67,17 @@ class AugmentationTransform:
                 alb.Sharpen(p=0.5),
                 alb.CLAHE(p=0.5)]
 
+            transforms = crop_transforms + image_transforms
+
         elif name == 'val':
+
             crop_transforms = [alb.NoOp(p=1)]
             image_transforms = [alb.AutoContrast(p=1), alb.CLAHE(p=1)]
 
+            transforms = crop_transforms + image_transforms
+
         elif name == 'test_set':
-
             # Augmentations for creating a test set from the Dentex dataset
-
             assert self.im_width is not None, 'im_width must be specified for creating test augmentations'
             assert self.im_height is not None, 'im_height must be specified for creating test augmentations'
 
@@ -94,13 +100,51 @@ class AugmentationTransform:
                            p=0.5),
                 alb.RandomBrightnessContrast(p=1.0)]
 
+            transforms = crop_transforms + image_transforms
+
+        elif name == 'resize_and_pad':
+            assert self.max_size is not None, 'At least max_size must be specified for resizing and padding'
+            min_height = self.im_height if self.im_height is not None else self.max_size
+            min_width = self.im_width if self.im_width is not None else self.max_size
+            transforms = [alb.LongestMaxSize(max_size=self.max_size),
+                          alb.PadIfNeeded(min_height=min_height,
+                                          min_width=min_width,
+                                          border_mode=cv2.BORDER_CONSTANT,
+                                          fill=0)]
+
+        elif name == 'train_transform':
+            height = self.im_height if self.im_height is not None else self.max_size
+            width = self.im_width if self.im_width is not None else self.max_size
+
+            crop_transforms = [
+                alb.Resize(height=height + 32, width=width + 32, p=1.0),
+                alb.RandomCrop(height=height, width=width, p=1.0)]
+
+            image_transforms = [
+                alb.HorizontalFlip(),
+                alb.Affine(scale=(0.9, 1.1),
+                           translate_percent=(-0.0625, 0.0625),
+                           rotate=(-45, 45),
+                           keep_ratio=True, p=1),
+                alb.Blur(),
+                alb.RandomGamma(),
+                alb.Sharpen(),
+                alb.GaussNoise(),
+                alb.CoarseDropout(num_holes_range=(1, 16),
+                                  hole_height_range=(4, 32),
+                                  hole_width_range=(4, 32)),
+                alb.CLAHE()]
+
+            transforms = crop_transforms + image_transforms
+
         else:
+
             logger.error('Transformation "{}" not implemented'.format(name))
             print('Transformation "{}" not implemented'.format(name))
             crop_transforms = [alb.NoOp(p=1)]
             image_transforms = [alb.NoOp(p=1)]
 
-        transforms = crop_transforms + image_transforms
+            transforms = crop_transforms + image_transforms
 
         return transforms
 

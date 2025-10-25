@@ -10,7 +10,7 @@ services:
         - DEV_computervision=1
     ipc: host
     env_file:
-      - ./.env
+      - ./env
     ports:
       - "8888:8888"
       - "6006:6006"

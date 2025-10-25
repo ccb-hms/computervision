@@ -47,7 +47,8 @@ RUN uv sync --inexact
 RUN python -m pip install -U \
     torchmetrics \
     timm \
-    accelerate
+    accelerate \
+    lightning
 
 RUN python -c "from accelerate.utils import write_basic_config; write_basic_config(mixed_precision='fp16')"
 

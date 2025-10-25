@@ -29,7 +29,7 @@ dependencies = [
 ]
 
 [tool.uv]
-python-preference = "only-system"
+python-preference = "system"
 
 [project.scripts]
 computervision = "computervision:main"

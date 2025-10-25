@@ -27,27 +27,6 @@ def plot_boxes(image,
                fontsize=8,
                cmap='grey',
                offset_xy=(0, 0)):
-    """
-    Plots bounding boxes on an image using the provided axis and optionally adds labels for each box.
-    It allows you to visualize bounding boxes in different colors and optionally with specific labels.
-    Supports customization of colors and colormap.
-
-    Args:
-        image: ndarray. Input image array on which the bounding boxes will be plotted.
-        box_list: list of tuples. Each tuple represents a bounding box defined as
-            (x-coordinate, y-coordinate, width, height).
-        ax: matplotlib.axes.Axes. The axis on which to plot the image and bounding boxes.
-        label_list: list of str, optional. A list of labels corresponding to each bounding
-            box in `box_list`. Default is None.
-        color: matplotlib color, optional. The color to use for all bounding boxes.
-            If not provided, a different color will be assigned to each box. Default is None.
-        cmap: str, optional. Colormap to use when displaying the image. Default is 'grey'.
-        offset_xy: tuple of int, optional. Offset for label placement in (x, y) direction.
-            Default is (0, 0).
-
-    Returns:
-        matplotlib.axes.Axes. The axis with the plotted image, bounding boxes, and optional labels.
-    """
     offset_xy = (10 + offset_xy[0], 100 + offset_xy[1])
     # Take a ratio that looks good
     offset = (image.shape[1]*offset_xy[0]/2500,
@@ -72,7 +51,6 @@ def plot_boxes(image,
         if label_list is not None:
             ax.text(x=box[0]+offset[0], y=box[1]+offset[1], s=label_list[b], color=color_list[b], fontsize=fontsize)
     return ax
-
 
 
 def clip_range(r, min_val=0, max_val=1):
@@ -215,7 +193,7 @@ def crop_image(image, box):
         crop_img: (np.ndarray) cropped image
     """
     x, y, w, h = [int(np.round(c)) for c in box]
-    return image[y:h, x:w, :]
+    return image[y:y+h, x:x+w, :]
 
 def is_image(image_file_path):
     """ Use the PIL package to check if file is an image """
@@ -232,13 +210,6 @@ def is_image(image_file_path):
     return file_is_image
 
 def validate_image_data(data_df, file_path_col):
-    """ Load and validate images from data frame
-    :parameters:
-        data_df (pd.DataFrame): data frame with image file paths
-        file_path_col (list): List of columns with file paths
-    :returns
-        output_df (pd.DataFrame): data frame with valid file paths
-    """
     output_df = copy.deepcopy(data_df)
     file_path_col = [file_path_col] if isinstance(file_path_col, str) else file_path_col
     for col in file_path_col:

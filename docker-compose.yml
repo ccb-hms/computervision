@@ -24,7 +24,7 @@ services:
     volumes:
       - .:/app
       - app_data:/app/data
-      - /home/andreas/data/data_model:/app/data_model
+      #/home/andreas/data/data_model:/app/data_model
 volumes:
   app_data:
     external: false

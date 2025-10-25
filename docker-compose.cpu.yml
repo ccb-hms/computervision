@@ -1,14 +1,7 @@
 services:
   app:
-    image: computervision:latest
+    image: computervision:0.0.2
     container_name: computervision
-    deploy:
-      resources:
-        reservations:
-          devices:
-          - driver: nvidia
-            count: 1
-            capabilities: [gpu]
     build: 
       context: .
       network: host
@@ -16,18 +9,15 @@ services:
       args:
         - DEV_computervision=1
     ipc: host
-    environment:
-    - NVIDIA_VISIBLE_DEVICES=all
-    - HOME=/app
     env_file:
-      - ./env
+      - ./.env
     ports:
       - "8888:8888"
       - "6006:6006"
     volumes:
       - .:/app
       - app_data:/app/data
-
+      - /home/andreas/data/data_model:/app/data_model
 volumes:
   app_data:
     external: false

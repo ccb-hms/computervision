@@ -1,8 +1,9 @@
 [![Python 3.12](
 https://img.shields.io/badge/python-3.12-blue.svg)](
 https://www.python.org/downloads/release/python-31210/)
-[![pytest](
-https://github.com/ccb-hms/computervision/actions/workflows/pytest.yml/badge.svg)](https://github.com/ccb-hms/computervision/actions/workflows/pytest.yml)
+[![pytest](https://github.com/ccb-hms/computervision/actions/workflows/pytest.yml/badge.svg?branch=main)](https://github.com/ccb-hms/computervision/actions/workflows/pytest.yml)
+[![docker](
+https://github.com/ccb-hms/computervision/actions/workflows/docker.yml/badge.svg?branch=main)](https://github.com/ccb-hms/computervision/actions/workflows/docker.yml)
 
 <p float="left">
     <img style="vertical-align: top" src="./images/train_248_boxes.png" width="40%" />

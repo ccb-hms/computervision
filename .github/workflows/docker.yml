@@ -18,9 +18,6 @@ jobs:
 
     - name: Clean up runner
       run: |
-        # Remove Python toolcache
-        rm -rf /opt/hostedtoolcache
-        
         # Remove Java (JDKs)
         sudo rm -rf /usr/lib/jvm
   
@@ -57,9 +54,6 @@ jobs:
         docker system prune -af || true
         docker builder prune -af || true
         df -h
-
-    - name: Check disk space
-      run: df -h
 
     - name: Build docker images
       run: docker compose build

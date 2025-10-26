@@ -46,4 +46,4 @@ open-access data repository.
 
 Label Studio is an open-source data labeling tool designed for labeling, annotating, and exploring various data types. The tool also features a robust machine learning interface, which can be utilized for training new models, active learning, supervised learning, and various other training techniques.
 
-For more information on how to use Label Studio, please refer to the [Label Studio documentation](https://labelstud.io/guide/). You can find installation instructions [here](https://labelstud.io/guide/install.html) and in the documentation of this repository [here](./docs/label_studio.md).
+For more information on how to use Label Studio, please refer to the [Label Studio documentation](https://labelstud.io/guide/). You can find installation instructions [here](https://labelstud.io/guide/install.html) and in the documentation of this repository [here](./docs/labelstudio.md).

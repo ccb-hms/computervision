@@ -19,6 +19,9 @@ jobs:
     - name: Clean up runner
       run: rm -rf /opt/hostedtoolcache
 
+    - name: Check disk space
+      run: df -h
+
     - name: Build docker images
       run: docker compose build
 

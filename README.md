@@ -18,8 +18,8 @@ Some common tasks included here are:
 
 - [Image Classification](./notebooks/classification)
 - [Object Detection](./notebooks/detection)
-- [Segmentation]
-- [Gradient-weighted Class Activation Mapping](./notebooks/classification/10_explainable_ai.ipynb)
+- [Instance segmentation](./notebooks)
+- [Gradient-weighted Class Activation Mapping](./notebooks/classification)
 
 ## The Dentex Challenge 2023
 
@@ -38,9 +38,9 @@ The data set is publicly available for download from the [Zenodo](https://zenodo
 open-access data repository.
 
 ## Getting started with this repository ##
-[Install on your local machine](./docs/local_install.md)
+[Install on your local machine](./docs/install_local.md)
 
-[Install on the HMS O2 cluster](./docs/O2_install.md)
+[Install on the HMS O2 cluster](./docs/install_O2.md)
 
 ## Label Studio ##
 

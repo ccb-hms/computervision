@@ -18,8 +18,8 @@ Some common tasks included here are:
 
 - [Image Classification](./notebooks/classification)
 - [Object Detection](./notebooks/detection)
-- [Segmentation]
-- [Gradient-weighted Class Activation Mapping](./notebooks/classification/10_explainable_ai.ipynb)
+- [Instance segmentation](./notebooks)
+- [Gradient-weighted Class Activation Mapping](./notebooks/classification)
 
 ## The Dentex Challenge 2023
 
@@ -38,12 +38,12 @@ The data set is publicly available for download from the [Zenodo](https://zenodo
 open-access data repository.
 
 ## Getting started with this repository ##
-[Install on your local machine](./docs/local_install.md)
+[Install on your local machine](./docs/install_local.md)
 
-[Install on the HMS O2 cluster](./docs/O2_install.md)
+[Install on the HMS O2 cluster](./docs/install_O2.md)
 
 ## Label Studio ##
 
 Label Studio is an open-source data labeling tool designed for labeling, annotating, and exploring various data types. The tool also features a robust machine learning interface, which can be utilized for training new models, active learning, supervised learning, and various other training techniques.
 
-For more information on how to use Label Studio, please refer to the [Label Studio documentation](https://labelstud.io/guide/). You can find installation instructions [here](https://labelstud.io/guide/install.html) and in the documentation of this repository [here](./docs/label_studio.md).
+For more information on how to use Label Studio, please refer to the [Label Studio documentation](https://labelstud.io/guide/). You can find installation instructions [here](https://labelstud.io/guide/install.html) and in the documentation of this repository [here](./docs/labelstudio.md).

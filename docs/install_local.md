@@ -11,8 +11,8 @@ Tensorflow 2.15 with NVIDIA CUDA 12.1, and a Jupyter Lab server, making it
 well-suited for training and evaluating custom models. 
 
 <p float="left">
-    <img style="vertical-align: top" src="./images/jupyterlab_segment.png" width="50%" />
-    <img style="vertical-align: top" src="./images/tensorboard_segment_light.png" width="40%" />
+    <img style="vertical-align: top" src="../images/jupyterlab_segment.png" width="50%" />
+    <img style="vertical-align: top" src="../images/tensorboard_segment_light.png" width="40%" />
 </p>
 
 Here's a step-by-step guide on how to use this setup:

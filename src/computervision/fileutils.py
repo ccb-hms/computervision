@@ -6,6 +6,7 @@ Center for Computational Biomedicine
 
 import os
 import shutil
+import glob
 import logging
 import contextlib
 import traceback
@@ -158,47 +159,47 @@ class FileOP:
             output_file_path = None
         return output_file_path
 
-    class Flag:
-        def __init__(self, flag_dir):
-            self.flag_dir = flag_dir
-            self.flag_option_list = ['started', 'success', 'failed']
+class Flag:
+    def __init__(self, flag_dir):
+        self.flag_dir = flag_dir
+        self.flag_option_list = ['started', 'success', 'failed']
 
-        def set_flag_file(self, flag_base, flag, clean_flags=True):
-            """
-            Set a new flag file
-            :param: flag_base: str, file basename of flag file without extension
-            :param: flag: str, file extension of flag file must be in flag_option_list
-            :param: clean_flags: remove all flags with flag_base and set new flag
-            :return: dict{flag_option: flag file path}
-            """
-            flag_file_list = [os.path.join(self.flag_dir, f'{flag_base}.{flg}') for flg in self.flag_option_list]
-            flag_file_dict = dict(zip(self.flag_option_list, flag_file_list))
+    def set_flag_file(self, flag_base, flag, clean_flags=True):
+        """
+        Set a new flag file
+        :param: flag_base: str, file basename of flag file without extension
+        :param: flag: str, file extension of flag file must be in flag_option_list
+        :param: clean_flags: remove all flags with flag_base and set new flag
+        :return: dict{flag_option: flag file path}
+        """
+        flag_file_list = [os.path.join(self.flag_dir, f'{flag_base}.{flg}') for flg in self.flag_option_list]
+        flag_file_dict = dict(zip(self.flag_option_list, flag_file_list))
 
-            assert flag in self.flag_option_list, f'Wrong flag parameter. Must be from list {self.flag_option_list}'
+        assert flag in self.flag_option_list, f'Wrong flag parameter. Must be from list {self.flag_option_list}'
 
-            if Path(self.flag_dir).exists():
-                if clean_flags:
-                    for fl in flag_file_dict.values():
-                        Path(fl).unlink(missing_ok=True)
-                with open(flag_file_dict.get(flag), 'w') as fl:
-                    fl.write('')
-            else:
-                print(f'Folder flag_dir={self.flag_dir} does not exist.')
+        if Path(self.flag_dir).exists():
+            if clean_flags:
+                for fl in flag_file_dict.values():
+                    Path(fl).unlink(missing_ok=True)
+            with open(flag_file_dict.get(flag), 'w') as fl:
+                fl.write('')
+        else:
+            print(f'Folder flag_dir={self.flag_dir} does not exist.')
 
-            return flag_file_dict.get(flag)
+        return flag_file_dict.get(flag)
 
-        def find_flags(self):
-            """
-            Find flag files in flag_dir
-            :return: list of flag_base names
-            """
-            flag_pat_list = [os.path.join(self.flag_dir, f'*.{flg}') for flg in self.flag_option_list]
-            flag_file_dict = dict(zip(self.flag_option_list, flag_pat_list))
+    def find_flags(self):
+        """
+        Find flag files in flag_dir
+        :return: list of flag_base names
+        """
+        flag_pat_list = [os.path.join(self.flag_dir, f'*.{flg}') for flg in self.flag_option_list]
+        flag_file_dict = dict(zip(self.flag_option_list, flag_pat_list))
 
-            flag_exist_list = []
-            for file_pat in flag_file_dict.values():
-                flag_exist_list.extend(glob.glob(file_pat))
+        flag_exist_list = []
+        for file_pat in flag_file_dict.values():
+            flag_exist_list.extend(glob.glob(file_pat))
 
-            flag_base_exist_list = [os.path.splitext(os.path.basename(file))[0] for file in flag_exist_list]
+        flag_base_exist_list = [os.path.splitext(os.path.basename(file))[0] for file in flag_exist_list]
 
-            return flag_base_exist_list
+        return flag_base_exist_list

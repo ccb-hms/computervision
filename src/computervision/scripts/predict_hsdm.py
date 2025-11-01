@@ -40,7 +40,7 @@ model_config_file = os.path.join(model_dir, f'{model_name}.json')
 # Prediction threshold and other information about the process
 threshold = 0.1
 n_files_per_chunk = 2000
-file_base_name = 'prototype_251030'
+file_base_name = 'Images_251030'
 
 # Let's create an output directory to save some examples
 output_dir = os.path.join(model_dir, 'output')
@@ -59,7 +59,7 @@ print(*list(model_config.keys()), sep='\n')
 # Load the model
 dtr = DETRinference(device_name='cuda:0',
                     checkpoint_path=checkpoint_dir,
-                    batch_size=256)
+                    batch_size=350)
 transforms = AugmentationTransform().get_transforms(name='val')
 bbox_format = model_config.get('bbox_format')
 
@@ -95,8 +95,7 @@ print(df.shape)
 print(len(df['file_hash'].unique()))
 
 # Filter the prototype flag
-df = df.loc[df['prototype_flag']]
-print(df.shape)
+# df = df.loc[df['prototype_flag']]
 
 # File list
 # n_test = 100

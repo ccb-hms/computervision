@@ -30,6 +30,9 @@ EXPOSE 6006
 RUN mkdir -p /app
 WORKDIR /app
 
+RUN apt-get -y update && \
+    apt-get -y install libgl1
+
 # Install the project's dependencies using the lockfile and settings
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=.git,target=.git \
@@ -45,10 +48,13 @@ RUN uv sync --inexact
 
 # Dependencies that depend on the container's libraries
 RUN python -m pip install -U \
+    "numpy<2.0" \
     torchmetrics \
     timm \
     accelerate \
-    lightning
+    lightning \
+    opencv-python \
+    grad-cam
 
 RUN python -c "from accelerate.utils import write_basic_config; write_basic_config(mixed_precision='fp16')"
 

@@ -27,6 +27,7 @@ data_dir = os.path.join(os.environ.get('DATA'), 'dentex', dataset_name)
 
 # Download directory (change as needed)
 model_dir = os.path.join(data_dir, 'model')
+Path(model_dir).mkdir(parents=True, exist_ok=True)
 
 # This image directory is where the xrays are in the archive, so should be left as-is
 raw_image_dir = os.path.join(data_dir, 'quadrant-enumeration-disease', 'xrays')
@@ -48,6 +49,7 @@ dset_col = 'dataset'
 labels = sorted(list(df[label_col].unique()))
 label2id = dict(zip(labels, range(len(labels))))
 id2label = {category_id: label for label, category_id in label2id.items()}
+print(label2id)
 
 # Now we can add a category id to the data frame
 df = df.assign(category=df[label_col].apply(lambda label: label2id.get(label)))
@@ -132,10 +134,10 @@ model_info = {'model_version': model_version_str,
               'im_height': im_height,
               'max_image_size': max_image_size}
 
-training_args = {'max_epochs': 5,
-                 'num_classes': 6,
+training_args = {'max_epochs': 50,
+                 'num_classes': 4,
                  'num_workers': 2,
-                 'batch_size': 16,
+                 'batch_size': 256,
                  'initial_lr': 1.0e-3,
                  'check_val_every_n_epoch': 1,
                  'checkpoint_very_n_epoch': 2,

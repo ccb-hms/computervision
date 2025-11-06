@@ -115,9 +115,9 @@ class DETRdataset(Dataset):
         file = self.file_list[idx]
         file_name = os.path.basename(file)
         image = ImageData().load_image(file)
-        # Convert to RGB
         if len(image.shape) == 2:
             image = ImageData().np2color(image)
+
         if any(var is None for var in [self.label_id_col, self.bbox_col]):
             transformation = alb.Compose(self.transforms)
             # Apply image transform

@@ -58,6 +58,9 @@ RUN python -m pip install -U \
 
 RUN python -c "from accelerate.utils import write_basic_config; write_basic_config(mixed_precision='fp16')"
 
+# Detectron2 library
+RUN python -m pip install "git+https://github.com/facebookresearch/detectron2.git"
+
 # Copy bash scripts and set executable flags
 RUN mkdir -p /run_scripts
 COPY /bash_scripts/* /run_scripts

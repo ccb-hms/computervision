@@ -22,13 +22,9 @@ dependencies = [
     "ipywidgets>=8.1.7",
     "pandas-stubs>=2.3.2.250827",
     "protobuf<5.0",
-<<<<<<< HEAD
     "seaborn>=0.13.2",
     "pytest>=8.4.2",
-=======
-    "seaborn>=0.13.2"
->>>>>>> develop
-]
+    ]
 
 [tool.uv]
 python-preference = "system"

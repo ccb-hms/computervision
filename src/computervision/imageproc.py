@@ -64,7 +64,7 @@ def flatten(list_of_lists: list) -> list:
 
 def transform_box(box_padded, img, pad_pixels=0):
     """
-    Transform bounding box from padded to original image
+    Transform bounding box from padded to original
     """
     img_h, img_w = img.shape[:2]
     x, y, w, h = box_padded - float(pad_pixels)

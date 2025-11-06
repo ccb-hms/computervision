@@ -195,32 +195,36 @@ def crop_image(image, box):
     x, y, w, h = [int(np.round(c)) for c in box]
     return image[y:y+h, x:x+w, :]
 
-def is_image(image_file_path):
-    """ Use the PIL package to check if file is an image """
+def is_image(image_file_path, min_area=500):
+    """ Use the PIL package to check if a file is an image """
     file_is_image = False
     if os.path.exists(image_file_path):
         try:
-            Image.open(image_file_path)
-        except Exception as ex:
+            img = Image.open(image_file_path)
+            width, height = img.size
+            area = width * height
+            assert area >= min_area
+        except (IOError, AssertionError) as ex:
             logger.warning(f'File: {image_file_path} is not an image.')
+        except Exception as ex:
+            logger.warning(f'File: {image_file_path} is not an image. Exception: {ex}')
         else:
             file_is_image = True
     else:
         logger.warning(f'File: {image_file_path} does not exist.')
     return file_is_image
 
-def validate_image_data(data_df, file_path_col):
+def validate_image_data(data_df, file_col, image_dir=None):
     output_df = copy.deepcopy(data_df)
-    file_path_col = [file_path_col] if isinstance(file_path_col, str) else file_path_col
-    for col in file_path_col:
-        n_start = len(output_df)
-        output_df = output_df.loc[output_df[col].apply(is_image)]
-        n_dropped = n_start - len(output_df)
-        if n_dropped > 0:
-            warning_msg = f'Dropped {n_dropped} rows from bad data in column: {col}.'
-            logger.warning(warning_msg)
-        else:
-            logger.info('All files validated.')
+    n_start = len(output_df)
+    output_df = output_df.loc[output_df[file_col].\
+        apply(lambda f: is_image(os.path.join(image_dir, f), min_area=500))]
+    n_dropped = n_start - len(output_df)
+    if n_dropped > 0:
+        warning_msg = f'Warning: Dropped {n_dropped} rows!'
+        logger.warning(warning_msg)
+    else:
+        logger.info('All files validated.')
     return output_df
 
 def determine_bbox_format(bbox):

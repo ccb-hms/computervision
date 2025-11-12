@@ -1,0 +1,13 @@
+{
+  "base_url": "/",
+  "hostname": "0.0.0.0",
+  "password": false,
+  "pid": 128,
+  "port": 8888,
+  "root_dir": "/app/notebooks",
+  "secure": false,
+  "sock": "",
+  "token": "136b1585db330ec1f2a64fd569d6e30779bb857c6c16e2a2",
+  "url": "http://a1419b5efc06:8888/",
+  "version": "2.17.0"
+}

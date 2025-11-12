@@ -1,0 +1,13 @@
+{
+  "shell_port": 36765,
+  "iopub_port": 33175,
+  "stdin_port": 37277,
+  "control_port": 52357,
+  "hb_port": 60925,
+  "ip": "127.0.0.1",
+  "key": "f6ff75a6-ca237a5e3fca677efe380437",
+  "transport": "tcp",
+  "signature_scheme": "hmac-sha256",
+  "kernel_name": "python3",
+  "jupyter_session": "/app/notebooks/classification/01_download.ipynb"
+}

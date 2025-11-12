@@ -1,0 +1,21 @@
+#!/bin/bash
+
+VERSION="0.0.2"
+REPO_DIR=$HOME/gitrepos/computervision
+DATA_DIR="/n/lw_groups/cores/ccb/lab/projects/hsdm/toothmodel"
+SIF_DIR="/n/app/containers/shared/ccb"
+SCRIPT_DIR="/app/src/computervision/scripts"
+
+apptainer exec \
+	--bind $REPO_DIR:/app \
+	--bind $DATA_DIR:/app/data_model \
+	--env-file $REPO_DIR/.env \
+	--fakeroot \
+	--containall \
+	--no-init \
+	--no-umask \
+	--no-eval \
+	--compat \
+	--nv \
+	$SIF_DIR/computervision_$VERSION.sif \
+	python $SCRIPT_DIR/$1

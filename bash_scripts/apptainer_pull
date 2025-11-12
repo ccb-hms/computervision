@@ -1,0 +1,15 @@
+#!/bin/bash
+
+VERSION="0.0.2"
+REPO_DIR="$HOME/gitrepos/computervision"
+DATA_DIR="/n/lw_groups/cores/ccb/lab/projects/hsdm/toothmodel"
+SIF_DIR="/n/app/containers/shared/ccb"
+
+# Pull the container locally if you haven't already
+export cvtoken="$cvtoken"
+
+# Authenticate: not needed for public images
+echo $cvtoken | docker login ghcr.io -u awerdich --password-stdin
+
+# Pull the image from the GitHub Container Registry
+apptainer pull --dir $SIF_DIR docker://ghcr.io/awerdich/computervision:$VERSION

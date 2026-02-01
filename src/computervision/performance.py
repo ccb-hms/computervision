@@ -105,7 +105,7 @@ class DetectionMetrics:
                 sort_values(by='score', ascending=False). \
                 reset_index(drop=True)
 
-            if n_labels > 0:
+            if (n_labels > 0) & (len(classifications_label) > 1):
 
                 # Calculate precision and recall for each row
                 correct = classifications_label['TP'].tolist()
@@ -116,7 +116,7 @@ class DetectionMetrics:
                 # recall = true positives / samples with this label in ground truth data
                 recall = [sum(correct[:i + 1]) / n_labels for i in range(len(correct))]
 
-                # Calculate precision and recall independent from the bounding box
+                # Calculate precision and recall independent of the bounding box
                 # We count every prediction that is in the image as positive
                 # Detections that were not in the image did not get an iou value (FP)
 
@@ -124,7 +124,7 @@ class DetectionMetrics:
                 n_detections = len(classifications_label)
                 # TP: all detections for that class with a ground truth label, so IoU >= 0
                 n_detections_with_iou = len(classifications_label.loc[~classifications_label['IoU'].isnull()])
-                # We can add a precision and recall value that is just for this class, independent from the bounding box
+                # We can add a precision and recall value just for this class, independent of the bounding box
                 precision_label = n_detections_with_iou / n_detections
                 recall_label = n_detections_with_iou / n_labels
 

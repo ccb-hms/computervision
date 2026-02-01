@@ -1,0 +1,38 @@
+<View>
+<Style>
+.tooth_cols {   background: lightblue;
+                font-weight: lighter;
+                font-family: monospace, monospace;
+                border: 1px solid black;
+                color: blue;
+                max-width: 1048px;
+                justify-content: space-evenly;
+                text-align: left;
+                align-items: left;
+                flex-wrap: wrap; }
+</Style>
+<Image name="image" value="$image" maxHeight="350px" zoomControl="true" zoomBy="1.1" />
+<View style="display: flex;">
+    <Header size="5" value="Image Type" style="font-weight:lighter;color:blue" />
+    <Choices name="type" toName="image"
+             choice="single"
+             showInline="true"
+             required="true"
+             requiredMessage="Select Diagnostic Quality">
+        <Choice value="bitewing"/>
+        <Choice value="periapical"/>
+    </Choices>
+  <Header size="5" value="Use" style="font-weight:lighter;color:blue" />
+  <Choices name="use" toName="image"
+           choice="single"
+           showInline="true"
+           required="true"
+           visibleWhen="choice-selected"
+           whenTagName="type"
+           whenChoiceValue="periapical"
+           requiredMessage="Use for patientmodel">
+        <Choice value="include" selected="true"/>
+        <Choice value="exclude" selected="false"/>
+    </Choices>
+    </View>
+</View>

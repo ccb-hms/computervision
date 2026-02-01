@@ -1,12 +1,3 @@
-NVIDIA_VISIBLE_DEVICES="all"
-HOME="/app"
-DATA="/app/data_model"
-DATA_DIR="/app/data"
+DATA_DIR="/home/andreas/data/cvdata"
 CL_URL="https://dsets.s3.us-east-1.amazonaws.com/classification_datasets/dataset_dental_roboflow.tar.gz"
 DT_URL="https://dsets.s3.amazonaws.com/dentex/dentex-quadrant-enumeration.tar.gz"
-cvtoken=""
-HF_HOME="/app/data_model/huggingface-cache"
-NGC_API_KEY="NGC_API_KEY"
-OMPI_ALLOW_RUN_AS_ROOT=1
-OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
-NIM_MAX_MODEL_LEN=81920

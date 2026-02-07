@@ -23,11 +23,18 @@ dependencies = [
     "pandas-stubs>=2.3.2.250827",
     "protobuf<5.0",
     "seaborn>=0.13.2",
-    "pytest>=8.4.2",
-    ]
+    "python-dotenv>=1.2.1",
+    "opencv-python-headless>=4.13.0.90",
+    "pyarrow>=23.0.0",
+    "torch>=2.10.0",
+    "torchvision>=0.25.0",
+    "scikit-learn>=1.8.0",
+    "lightning[extra]>=2.6.1",
+    "tensorboard>=2.20.0",
+]
 
 [tool.uv]
-python-preference = "system"
+python-preference = "only-system"
 
 [project.scripts]
 computervision = "computervision:main"

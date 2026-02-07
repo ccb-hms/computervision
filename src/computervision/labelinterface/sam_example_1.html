@@ -1,0 +1,21 @@
+<View>
+  <Image name="image" value="$image" zoom="true"/>
+  <Header value="Brush Labels"/>
+  <BrushLabels name="pos1" toName="image">
+  	<Label value="01" background="#FF0000" showInline="true"/>
+    <Label value="02" background="#00FF00" showInline="true"/>
+    <Label value="03" background="#0000FF" showInline="true"/>
+  </BrushLabels>
+  <Header value="Keypoint Labels"/>
+  <KeyPointLabels name="pos2" toName="image" smart="true">
+    <Label value="01" background="#FF0000" showInline="true"/>
+    <Label value="02" background="#00FF00" showInline="true"/>
+    <Label value="03" background="#0000FF" showInline="true"/>
+  </KeyPointLabels>
+  <Header value="Rectangle Labels"/>
+  <RectangleLabels name="pos3" toName="image" smart="true">
+    <Label value="01" background="#FF0000" showInline="true"/>
+    <Label value="02" background="#00FF00" showInline="true"/>
+    <Label value="03" background="#0000FF" showInline="true"/>
+  </RectangleLabels>
+</View>

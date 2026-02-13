@@ -26,6 +26,7 @@ dependencies = [
     "lightning[extra]>=2.6.1",
     "tensorboard>=2.20.0",
     "setuptools<=81",
+    "grad-cam>=1.5.5",
 ]
 
 [build-system]

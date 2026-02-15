@@ -1,0 +1,49 @@
+# This one failed to export the segmentations
+<View>
+  <Image name="image" value="$image" zoom="true"/>
+  <BrushLabels name="brush" toName="image">
+  </BrushLabels>
+  <RectangleLabels name="pos" toName="image" smart="true">
+    <Label value="01" background="#8B0000" showInline="true" hotkey=""/>
+    <Label value="02" background="#B22222" showInline="true" hotkey=""/>
+    <Label value="03" background="#FF0000" showInline="true" hotkey=""/>
+    <Label value="04" background="#FF4500" showInline="true" hotkey=""/>
+    <Label value="05" background="#FF6347" showInline="true" hotkey=""/>
+    <Label value="06" background="#FF7F50" showInline="true" hotkey=""/>
+    <Label value="07" background="#FF8C69" showInline="true" hotkey=""/>
+    <Label value="08" background="#FF1493" showInline="true" hotkey=""/>
+    <Label value="09" background="#FF69B4" showInline="true" hotkey=""/>
+    <Label value="10" background="#DB7093" showInline="true" hotkey=""/>
+    <Label value="11" background="#C71585" showInline="true" hotkey=""/>
+    <Label value="12" background="#CD5C5C" showInline="true" hotkey=""/>
+    <Label value="13" background="#DC143C" showInline="true" hotkey=""/>
+    <Label value="14" background="#E9967A" showInline="true" hotkey=""/>
+    <Label value="15" background="#FA8072" showInline="true" hotkey=""/>
+    <Label value="16" background="#FFA07A" showInline="true" hotkey=""/>
+    <Label value="17" background="#00008B" showInline="true" hotkey=""/>
+    <Label value="18" background="#0000CD" showInline="true" hotkey=""/>
+    <Label value="19" background="#0000FF" showInline="true" hotkey=""/>
+    <Label value="20" background="#1E90FF" showInline="true" hotkey=""/>
+    <Label value="21" background="#4169E1" showInline="true" hotkey=""/>
+    <Label value="22" background="#4682B4" showInline="true" hotkey=""/>
+    <Label value="23" background="#5F9EA0" showInline="true" hotkey=""/>
+    <Label value="24" background="#00BFFF" showInline="true" hotkey=""/>
+    <Label value="25" background="#87CEEB" showInline="true" hotkey=""/>
+    <Label value="26" background="#87CEFA" showInline="true" hotkey=""/>
+    <Label value="27" background="#00CED1" showInline="true" hotkey=""/>
+    <Label value="28" background="#20B2AA" showInline="true" hotkey=""/>
+    <Label value="29" background="#40E0D0" showInline="true" hotkey=""/>
+    <Label value="30" background="#48D1CC" showInline="true" hotkey=""/>
+    <Label value="31" background="#7FFFD4" showInline="true" hotkey=""/>
+    <Label value="32" background="#ADD8E6" showInline="true" hotkey=""/>
+   </RectangleLabels>
+  <Header size="3" value="All objects complete" style="font-weight:lighter;color:blue" />
+  <Choices name="bbcomplete" toName="image"
+             choice="single"
+             showInline="true"
+             required="true"
+             requiredMessage="Bounding boxes complete?">
+    	<Choice value="yes"/>
+      	<Choice value="no"/>
+  </Choices>
+</View>

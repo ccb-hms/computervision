@@ -1,19 +1,10 @@
 #!/bin/bash
 
+VERSION="0.0.2"
 REPO_DIR=$HOME/gitrepos/computervision
-SCRIPT_DIR=/app/src/computervision/scripts
-DATA_DIR=$HOME/data/data_model
-SIF_DIR=$HOME/data/sif
-
-# Pull the container locally if you haven't already
-# cd $SIF_DIR
-export cvtoken="$cvtoken"
-
-# Authenticate: not needed for public images
-echo $cvtoken | docker login ghcr.io -u awerdich --password-stdin
-
-# Pull the image from the GitHub Container Registry
-apptainer pull --dir $SIF_DIR docker://ghcr.io/awerdich/computervision:latest
+DATA_DIR="/n/lw_groups/cores/ccb/lab/projects/hsdm/toothmodel"
+SIF_DIR="/n/app/containers/shared/ccb"
+SCRIPT_DIR="/app/src/computervision/scripts"
 
 apptainer exec \
 	--bind $REPO_DIR:/app \
@@ -26,5 +17,5 @@ apptainer exec \
 	--no-eval \
 	--compat \
 	--nv \
-	$SIF_DIR/computervision_latest.sif \
+	$SIF_DIR/computervision_$VERSION.sif \
 	python $SCRIPT_DIR/$1

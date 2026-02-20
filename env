@@ -4,3 +4,4 @@
 DATA_DIR=/app/data
 CL_URL=https://dsets.s3.us-east-1.amazonaws.com/classification_datasets/dataset_dental_roboflow.tar.gz
 DT_URL=https://dsets.s3.amazonaws.com/dentex/dentex-quadrant-enumeration.tar.gz
+HF_TOKEN=''

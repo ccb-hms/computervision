@@ -186,9 +186,9 @@ class DETRansform:
         if transforms is None:
             self.transforms = [alb.NoOp()]
         if bbox_format is None:
-            self.bbox_format = {'format': 'coco',
+            self.bbox_format = {'coord_format': 'coco',
                                 'label_fields': ['quadrants', 'positions'],
-                                'clip': True,
+                                'clip_bboxes_on_input': True,
                                 'filter_invalid_bboxes': True,
                                 'min_area': 5000}
 
@@ -223,7 +223,7 @@ class DETRansform:
         assert len(bboxes) == len(labels), 'We need as many labels as bounding boxes: len(bboxes) == len(labels)!'
         assert len(self.bbox_format.get('label_fields')) == 1, 'We can only use one set of labels.'
         assert self.bbox_format.get(
-            'format') == 'coco', f'Bounding box format must be "coco", but is: {self.bbox_format.get("format")}!'
+            'coord_format') == 'coco', f'Bounding box format must be "coco", but is: {self.bbox_format.get("coord_format")}!'
         assert isinstance(image_id, int), 'Image ID must be of type int.'
         assert all(isinstance(l, int) for l in labels), 'All labels must be class IDs (int).'
 

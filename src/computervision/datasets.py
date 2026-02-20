@@ -89,10 +89,10 @@ class DETRdataset(Dataset):
         self.file_list = [os.path.join(image_dir, file) for file in list(data[file_name_col].unique())]
         assert self.validate()
         if bbox_format is None:
-            self.bbox_format = {'format': 'coco',
+            self.bbox_format = {'coord_format': 'coco',
                                 'label_fields': ['tooth_position'],
-                                'clip': True}
-        assert self.bbox_format['format'] == 'coco', 'Only "coco" format is supported.'
+                                'clip_bboxes_on_input': True}
+        assert self.bbox_format['coord_format'] == 'coco', 'Only "coco" format is supported.'
 
     def validate(self):
         """ Making sure all images can be read """

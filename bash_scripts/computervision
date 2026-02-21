@@ -1,0 +1,9 @@
+#!/bin/bash
+docker run \
+	--name computervision \
+	--gpus '"device=0"' \
+	--ipc=host \
+	--env-file env \
+	-v .:/app \
+	-p 7484:8888 \
+	ghcr.io/ccb-hms/computervision

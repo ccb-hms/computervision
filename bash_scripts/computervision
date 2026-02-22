@@ -5,5 +5,5 @@ docker run \
 	--ipc=host \
 	--env-file env \
 	-v .:/app \
-	-p 7484:8888 \
+	-p 7487:8888 \
 	ghcr.io/ccb-hms/computervision

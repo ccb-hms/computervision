@@ -27,6 +27,7 @@ dependencies = [
     "tensorboard>=2.20.0",
     "setuptools<=81",
     "grad-cam>=1.5.5",
+    "pytest>=9.0.2",
 ]
 
 [build-system]

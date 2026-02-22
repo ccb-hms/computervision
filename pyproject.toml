@@ -36,7 +36,7 @@ requires = ["setuptools>=41, <81",
 build-backend = "setuptools.build_meta"
 
 [tool.uv]
-python-preference = "only-system"
+python-preference = "system"
 
 [project.scripts]
 computervision = "computervision:main"

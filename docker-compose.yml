@@ -19,7 +19,7 @@ services:
       - TORCH_HOME=/app/data
       - DATA_DIR=/app/data
     env_file:
-      - ./env
+      - ./.env
     ports:
       - "8888:8888"
       - "6006:6006"

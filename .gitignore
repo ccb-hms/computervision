@@ -12,3 +12,6 @@ wheels/
 
 # Secrets
 .env
+
+# Data sets and project outputs
+data/

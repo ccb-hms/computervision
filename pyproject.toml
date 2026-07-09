@@ -1,6 +1,6 @@
 [project]
 name = "computervision"
-dynamic = ["version"]
+version = "0.0.1"
 description = "The CCB Computer Vision Repository"
 readme = "README.md"
 authors = [
@@ -28,6 +28,7 @@ dependencies = [
     "setuptools<=81",
     "grad-cam>=1.5.5",
     "pytest>=9.0.2",
+    "accelerate>=1.14.0",
 ]
 
 [build-system]
@@ -41,15 +42,3 @@ python-preference = "system"
 
 [project.scripts]
 computervision = "computervision:main"
-
-[tool.setuptools.package-data]
-# include VERSION file to a package
-computervision = ["VERSION"]
-
-[tool.setuptools]
-# this package will read some included files in runtime, avoid installing it as .zip
-zip-safe = false
-
-[tool.setuptools-git-versioning]
-enabled = true
-version_file = "computervision/VERSION"

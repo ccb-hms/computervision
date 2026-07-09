@@ -280,7 +280,10 @@ class ImageData:
                 print(read_error_msg)
                 logger.error(read_error_msg)
             else:
-                output_array = img.astype(np.uint8)
+                # We need to copy the image to make sure that the output is not write protected. 
+                #This is a known issue with skimage.io.imread.
+                output_array = img.copy()
+                output_array = output_array.astype(np.uint8)
         else:
             error_msg = f'Image file: {image_path} does not exist.'
             print(error_msg)

@@ -134,7 +134,7 @@ class DETRdataset(Dataset):
                 format_transform(image=image, image_id=idx, bboxes=bboxes, labels=labels)
 
         # Apply the image processor to the augmentation transform
-        processed = self.image_processor(images=transformed_im,
+        processed = self.image_processor(images=transformed_im.copy(),
                                          annotations=transformed_annotations,
                                          return_tensors='pt')
 

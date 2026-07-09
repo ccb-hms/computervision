@@ -1,6 +1,6 @@
 services:
   app:
-    image: computervision:v0.1.0
+    image: computervision:0.0.1
     container_name: computervision
     deploy:
       resources:
@@ -13,9 +13,11 @@ services:
       context: .
       network: host
       dockerfile: Dockerfile
-      args:
-        - DEV_computervision=1
     ipc: host
+    environment:
+      - HF_HOME=/app/data
+      - TORCH_HOME=/app/data
+      - DATA_DIR=/app/data
     env_file:
       - ./env
     ports:
@@ -23,6 +25,4 @@ services:
       - "6006:6006"
     volumes:
       - .:/app
-volumes:
-  app_data:
-    external: false
+      - ./data:/app/data

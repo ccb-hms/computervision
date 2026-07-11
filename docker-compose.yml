@@ -1,6 +1,6 @@
 services:
   app:
-    image: computervision:0.0.1
+    image: ghcr.io/ccb-hms/computervision:latest
     container_name: computervision
     deploy:
       resources:
@@ -9,10 +9,6 @@ services:
           - driver: nvidia
             count: 1
             capabilities: [gpu]
-    build: 
-      context: .
-      network: host
-      dockerfile: Dockerfile
     ipc: host
     environment:
       - HF_HOME=/app/data

@@ -1,0 +1,11 @@
+#!/bin/bash
+docker run \
+  --name computervision \
+  --gpus 1 \
+  --ipc=host \
+  -e DATA_DIR=/app/data \
+  --env-file ./env \
+  -p 8888:8888 \
+  -v "$(pwd)":/app \
+  -v "$(pwd)/data":/app/data \
+  ghcr.io/ccb-hms/computervision:latest

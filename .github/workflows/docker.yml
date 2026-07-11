@@ -68,6 +68,9 @@ jobs:
 
   test-ghcr-image:
     name: Run pytest in published GHCR image
+    permissions:
+      contents: read
+      packages: read
     strategy:
       fail-fast: false
       matrix:
@@ -77,8 +80,6 @@ jobs:
       run:
         shell: bash
     env:
-      DOCKER_USER: ${{ secrets.DOCKER_USER }}
-      DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
       MSYS_NO_PATHCONV: 1
 
     steps:
@@ -92,7 +93,7 @@ jobs:
       run: mkdir -p data
 
     - name: Log in to GitHub Container Registry
-      run: echo "${DOCKER_PASS}" | docker login ghcr.io -u "${DOCKER_USER}" --password-stdin
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
 
     - name: Pull published image
       run: docker pull ghcr.io/ccb-hms/computervision:latest

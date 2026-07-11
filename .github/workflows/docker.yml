@@ -8,7 +8,6 @@ jobs:
     name: Run tests in docker container
     runs-on: ubuntu-latest
     env:
-      COMPOSE_FILE: docker-compose.yml
       DOCKER_USER: ${{ secrets.DOCKER_USER }}
       DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
 
@@ -55,8 +54,58 @@ jobs:
         docker builder prune -af || true
         df -h
 
+    - name: Create .env file
+      run: cp env .env
+
     - name: Build docker images
-      run: docker compose build
+      run: docker compose -f docker-compose.build.yml build
+
+    - name: Tag built image for CPU test run
+      run: docker tag computervision:0.0.1 ghcr.io/ccb-hms/computervision:latest
 
     - name: Run tests
-      run: docker compose -f ./docker-compose.cpu.yml run app python -m pytest
+      run: docker compose -f docker-compose.cpu.yml run --rm app python -m pytest
+
+  test-ghcr-image:
+    name: Run pytest in published GHCR image
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      DOCKER_USER: ${{ secrets.DOCKER_USER }}
+      DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
+      MSYS_NO_PATHCONV: 1
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Create .env file
+      run: cp env .env
+
+    - name: Create data directory
+      run: mkdir -p data
+
+    - name: Log in to GitHub Container Registry
+      run: echo "${DOCKER_PASS}" | docker login ghcr.io -u "${DOCKER_USER}" --password-stdin
+
+    - name: Pull published image
+      run: docker pull ghcr.io/ccb-hms/computervision:latest
+
+    - name: Run tests
+      run: |
+        docker run --rm \
+          --ipc=host \
+          --env-file .env \
+          -e HF_HOME=/app/data \
+          -e TORCH_HOME=/app/data \
+          -e DATA_DIR=/app/data \
+          -v "${{ github.workspace }}:/app" \
+          -v "${{ github.workspace }}/data:/app/data" \
+          ghcr.io/ccb-hms/computervision:latest \
+          python -m pytest

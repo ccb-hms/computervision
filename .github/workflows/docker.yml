@@ -71,39 +71,11 @@ jobs:
     permissions:
       contents: read
       packages: read
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      MSYS_NO_PATHCONV: 1
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-
-    - name: Switch Docker Desktop to Linux containers
-      if: runner.os == 'Windows'
-      shell: pwsh
-      run: '& "$env:ProgramFiles\Docker\Docker\DockerCli.exe" -SwitchDaemon'
-
-    - name: Wait for Linux container engine
-      if: runner.os == 'Windows'
-      run: |
-        for i in $(seq 1 30); do
-          if docker info --format '{{.OSType}}' 2>/dev/null | grep -qi linux; then
-            echo "Docker is running Linux containers"
-            exit 0
-          fi
-          echo "Waiting for Docker to switch to Linux containers... ($i/30)"
-          sleep 5
-        done
-        echo "Docker did not switch to Linux containers in time" >&2
-        exit 1
 
     - name: Create .env file
       run: cp env .env

@@ -4,6 +4,8 @@ https://www.python.org/downloads/release/python-31210/)
 [![pytest](https://github.com/ccb-hms/computervision/actions/workflows/pytest.yml/badge.svg?branch=main)](https://github.com/ccb-hms/computervision/actions/workflows/pytest.yml)
 [![docker](
 https://github.com/ccb-hms/computervision/actions/workflows/docker.yml/badge.svg?branch=main)](https://github.com/ccb-hms/computervision/actions/workflows/docker.yml)
+[![GHCR](
+https://img.shields.io/badge/ghcr.io-ccb--hms%2Fcomputervision-blue?logo=docker)](https://github.com/ccb-hms/computervision/pkgs/container/computervision)
 
 <p float="left">
     <img style="vertical-align: top" src="./images/train_248_boxes.png" width="40%" />

@@ -2,9 +2,7 @@
    Test the AWS download of the Roboflow dental data
 """
 import os
-import glob
 import tempfile
-import pytest
 from computervision.fileutils import FileOP
 
 

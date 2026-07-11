@@ -1,0 +1,28 @@
+services:
+  app:
+    image: computervision:0.0.1
+    container_name: computervision
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: 1
+            capabilities: [gpu]
+    build: 
+      context: .
+      network: host
+      dockerfile: Dockerfile
+    ipc: host
+    environment:
+      - HF_HOME=/app/data
+      - TORCH_HOME=/app/data
+      - DATA_DIR=/app/data
+    env_file:
+      - ./.env
+    ports:
+      - "8888:8888"
+      - "6006:6006"
+    volumes:
+      - .:/app
+      - ./data:/app/data

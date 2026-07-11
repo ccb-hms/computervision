@@ -1,4 +1,6 @@
+# Location for the data if not using Docker
+DATA_DIR=/home/andreas/data/cv_data
 CL_URL=https://dsets.s3.us-east-1.amazonaws.com/classification_datasets/dataset_dental_roboflow.tar.gz
 DT_URL=https://dsets.s3.amazonaws.com/dentex/dentex-quadrant-enumeration.tar.gz
-HUGGING_FACE_HUB_TOKEN=hf_token
+HF_TOKEN=hf_token
 CLAUDE_CODE_OAUTH_TOKEN=claude_token

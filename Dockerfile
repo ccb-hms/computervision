@@ -44,6 +44,9 @@ RUN python -c "from accelerate.utils import write_basic_config; write_basic_conf
 # Detectron2 library
 RUN python -m pip install --no-build-isolation "git+https://github.com/facebookresearch/detectron2.git"
 
+# Link the image automatically to the repository on GitHub
+LABEL org.opencontainers.image.source=https://github.com/ccb-hms/computervision
+
 # Copy bash scripts and set executable flags
 COPY /bash_scripts/* /run_scripts/
 RUN chmod +x /run_scripts/*

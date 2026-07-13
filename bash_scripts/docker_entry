@@ -5,7 +5,7 @@
 # Run jupyter notebook
 jupyter lab --ip=0.0.0.0 --allow-root --port=8888 \
  	--ContentsManager.allow_hidden=True \
-	--notebook-dir=/app/notebooks \
+	--notebook-dir=/app \
 	--ServerApp.token='' \
 	--ServerApp.password=''
 
